@@ -15,9 +15,9 @@ Jeweler::Tasks.new do |gem|
   gem.name = "bravo"
   gem.homepage = "http://github.com/leanucci/bravo"
   gem.license = "MIT"
-  gem.summary = %Q{TODO: one-line summary of your gem}
-  gem.description = %Q{TODO: longer description of your gem}
-  gem.email = "leanucci@gmail.com"
+  gem.summary = "Adaptador AFIP wsfe."
+  gem.description = "Adaptador para el Web Service de Facturacion Electronica de AFIP"
+  gem.email = "leanucci@vurbia.com"
   gem.authors = ["Leandro Marcucci"]
   # Include your dependencies below. Runtime dependencies are required when using your gem,
   # and development dependencies are only needed for development (ie running rake tasks, tests, etc)
