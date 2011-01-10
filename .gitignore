@@ -23,3 +23,5 @@ tmtags
 
 # Other
 .rspec
+log/
+log/*.log
