@@ -10,5 +10,6 @@ Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 RSpec.configure do |config|
 
 end
+
 Bravo.pkey = 'spec/fixtures/pkey'
 Bravo.cert = 'spec/fixtures/cert.crt'

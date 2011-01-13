@@ -1,11 +1,16 @@
+require "rubygems"
+require "bundler/setup"
+require "bravo/version"
+require "savon"
+require "ruby-debug"
+
 module Bravo
-  autoload :Version,      "bravo/version"
   autoload :Authorizer,   "bravo/authorizer"
   autoload :AuthData,     "bravo/auth_data"
   autoload :Biller,       "bravo/biller"
 
   extend self
-  attr_reader :pkey, :cert, :cuit
+  attr_reader :pkey, :cert
   def pkey=(relative_path)
     @pkey = File.read(relative_path)
   end
@@ -14,8 +19,8 @@ module Bravo
     @cert = File.read(relative_path)
   end
 
-  def cuit=()
-    @cuit = "30711034389"
+  def self.cuit
+    "30711034389"
   end
 
   def auth_hash

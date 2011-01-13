@@ -1,11 +1,11 @@
 module Bravo
   class Biller
     def initialize
-      Bravo::AuthData.read
+      Bravo::AuthData.fetch
     end
 
     def dummy
-      client = Savon::Client.new "http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
+      client = Savon::Client.new("http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL")
       # client.fecaea_solicitar do |s|
       #   s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
       #   s.body = {"Auth"      => {"Token" => TOKEN, "Sign" => SIGN, "Cuit" => CUIT.to_i},
@@ -40,15 +40,15 @@ module Bravo
 
       resp = client.fe_comp_ultimo_autorizado do |s|
                s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-               s.body = {"Auth" => Bravo.auth_hash,
+               s.body = {"Auth" => {"Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit},
                          "PtoVta" => "2", "CbteTipo" => "1"}
              end
 
       @nro = resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro]
 
-      client.fecae_solicitar do |s|
+      resp = client.fecae_solicitar do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = {"Auth" => Bravo.auth_hash,
+        s.body = {"Auth" => {"Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit},
                   "FeCAEReq"  => {"FeCabReq" => {"CantReg" => "1", #todo sacado de la factura
                                                  "CbteTipo" => "1",
                                                  "PtoVta" => "2"},
@@ -57,7 +57,7 @@ module Bravo
                                                                      "DocNro" => "30710151543",
                                                                      "CbteDesde" => @nro.to_i+1,
                                                                      "CbteHasta" => @nro.to_i+1,
-                                                                     "CbteFch" => "20110105",
+                                                                     "CbteFch" => Time.new.strftime('%Y%m%d'),
                                                                      "ImpTotal" => "121.00",
                                                                      "ImpTotConc" => "0.00",
                                                                      "ImpNeto" => "100.00",
@@ -75,6 +75,7 @@ module Bravo
                                    }
                   }
       end
+      resp.to_hash
     end
   end
 end
