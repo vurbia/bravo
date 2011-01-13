@@ -5,9 +5,9 @@
 #
 # Modify following definitions according to your environment:
 #
-URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms  # WSAA URL
-KEY=spec/fixtures/pkey      # file containing the private key in PEM format
-CRT=spec/fixtures/cert.crt      # file containing the X.509 certificate in PEM format
+# URL=https://wsaahomo.afip.gov.ar/ws/services/LoginCms  # WSAA URL
+# KEY=spec/fixtures/pkey      # file containing the private key in PEM format
+# CRT=spec/fixtures/cert.crt      # file containing the X.509 certificate in PEM format
 TAFN="TA.xml"    # file name of the output file
 # modify next line if you need a proxy to get to the Internet or comment it out
 # if you don't need a proxy
@@ -79,7 +79,7 @@ function CallWSAA()
 {
   RESPONSE=$(
     echo "$REQUEST" |
-    curl -v -k -H 'Content-Type: application/soap+xml; action=""' -d @- $URL
+    curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- $URL
   )
 		echo "$REQUEST"
 }
@@ -145,6 +145,20 @@ EOF
 #[ $# -eq 1 ] && SERVICE=$1
 # otherwise, ask for it
 #[ $# -eq 0 ] && read -p "Service name: " SERVICE
+
+# Parse commandline arguments
+while getopts 'k:u:c:' OPTION
+do
+    case $OPTION in
+    c)    CRT=$OPTARG
+        ;;
+    k)    KEY=$OPTARG
+        ;;
+    u)    URL=$OPTARG
+        ;;
+    esac
+done
+shift $(($OPTIND - 1))
 MakeTRA          # Generate TRA
 MakeCMS          # Generate CMS (TRA + signature + certificate)
 MakeSOAPrequest  # Generate the SOAP request XML

@@ -2,18 +2,15 @@ GEM
   remote: http://rubygems.org/
   specs:
     builder (3.0.0)
+    columnize (0.3.2)
     crack (0.1.8)
     diff-lcs (1.1.2)
     git (1.2.5)
-    gyoku (0.1.1)
-      builder (>= 2.1.2)
-    httpi (0.7.7)
-      rack
     jeweler (1.5.2)
       bundler (~> 1.0.0)
       git (>= 1.2.5)
       rake
-    rack (1.2.1)
+    linecache (0.43)
     rake (0.8.7)
     rcov (0.9.9)
     rspec (2.4.0)
@@ -24,11 +21,14 @@ GEM
     rspec-expectations (2.4.0)
       diff-lcs (~> 1.1.2)
     rspec-mocks (2.4.0)
-    savon (0.8.2)
+    ruby-debug (0.10.4)
+      columnize (>= 0.1)
+      ruby-debug-base (~> 0.10.4.0)
+    ruby-debug-base (0.10.4)
+      linecache (>= 0.3)
+    savon (0.7.8)
       builder (>= 2.1.2)
-      crack (~> 0.1.8)
-      gyoku (>= 0.1.1)
-      httpi (>= 0.7.5)
+      crack (>= 0.1.4)
 
 PLATFORMS
   ruby
@@ -38,4 +38,5 @@ DEPENDENCIES
   jeweler (~> 1.5.1)
   rcov
   rspec (~> 2.4.0)
+  ruby-debug
   savon
