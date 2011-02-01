@@ -1,5 +1,5 @@
 source "http://rubygems.org"
-gem "savon"
+gem "savon", "~> 0.7.8"
 
 group :development do
   gem "ruby-debug"

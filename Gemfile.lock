@@ -26,7 +26,7 @@ GEM
       ruby-debug-base (~> 0.10.4.0)
     ruby-debug-base (0.10.4)
       linecache (>= 0.3)
-    savon (0.7.8)
+    savon (0.7.9)
       builder (>= 2.1.2)
       crack (>= 0.1.4)
 
@@ -39,4 +39,4 @@ DEPENDENCIES
   rcov
   rspec (~> 2.4.0)
   ruby-debug
-  savon
+  savon (~> 0.7.8)
