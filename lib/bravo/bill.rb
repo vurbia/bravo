@@ -14,6 +14,7 @@ module Bravo
       @body = {"Auth" => Bravo.auth_hash}
       self.doc_type = attrs[:doc_type]  || Bravo.default_doc_type
       self.mon_id   = attrs[:mon_id]    || Bravo.default_mon_id
+      self.iva_cond = attrs[:iva_cond]
       # self.concept  = attrs[:concept]   || Bravo.default_concept
 
       @net          = attrs[:net]       || 0
