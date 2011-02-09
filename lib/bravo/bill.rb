@@ -1,9 +1,5 @@
 module Bravo
   class Bill
-    # net should be an integer
-    # doc_num can be either an int or str
-    # doc_type, concept, mon_id, aliciva_id  should be the index
-
     attr_reader :client, :body, :base_imp, :total
     attr_accessor :net, :doc_num, :iva_cond, :doc_type, :concept, :mon_id,
                   :due_date, :from, :to, :aliciva_id
@@ -18,12 +14,15 @@ module Bravo
       @body = {"Auth" => Bravo.auth_hash}
       self.doc_type = attrs[:doc_type]  || Bravo.default_doc_type
       self.mon_id   = attrs[:mon_id]    || Bravo.default_mon_id
-      self.concept = attrs[:concept]    || Bravo.default_concept
-      @net = attrs[:net] || 0
+      # self.concept  = attrs[:concept]   || Bravo.default_concept
+
+      @net          = attrs[:net]       || 0
     end
 
     def cbte_type
-      type = Bravo::BILL_TYPE[Bravo.own_iva_cond][self.iva_cond]
+      if self.iva_cond < Bravo::COND_IVA.size
+        type = Bravo::BILL_TYPE[Bravo.own_iva_cond][Bravo::COND_IVA[self.iva_cond][0]]
+      end
       raise NullOrInvalidAttribute.new, "Please choose a valid document type." if type.nil?
       type
     end
@@ -90,12 +89,12 @@ module Bravo
       header["FchProceso"] = header_response[:fch_proceso]
 
       body["FeCAEReq"]["FeCabReq"] = header
-      body
+      body.to_hash
     end
 
     def setup_bill
       fecaereq = {"FeCAEReq" => {
-                    "FeCabReq" => Bravo::Bill.header,
+                    "FeCabReq" => Bravo::Bill.header(cbte_type),
                     "FeDetReq" => {
                       "FECAEDetRequest" => {
                         "Concepto"    => Bravo::CONCEPTO[concept][0], #productos
@@ -144,9 +143,9 @@ module Bravo
     private
 
     class << self
-      def header
+      def header(cbte_type)
         {"CantReg" => "1", #todo sacado de la factura
-         "CbteTipo" => "1",
+         "CbteTipo" => "#{cbte_type}",
          "PtoVta" => "2"}
       end
     end
