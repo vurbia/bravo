@@ -2,7 +2,7 @@ require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
 
 describe "Bill" do
   it "should setup a header hash" do
-    @header = Bravo::Bill.header
+    @header = Bravo::Bill.header(0)
     @header.size.should == 3
     ["CantReg", "CbteTipo", "PtoVta"].each do |key|
       @header.has_key?(key).should == true
@@ -22,28 +22,24 @@ describe "Bill" do
     end
 
     it "should calculate it's cbte_tipo for Responsable Inscripto" do
-      @bill.iva_cond = "RI"
+      @bill.iva_cond = 0
       @bill.cbte_type.should == "01"
     end
 
     it "should calculate it's cbte_tipo for Consumidor Final" do
-      @bill.iva_cond = "CF"
+      @bill.iva_cond = 1
       @bill.cbte_type.should == "06"
     end
 
     it "raise error on nil iva cond" do
-      @bill.iva_cond = nil
-      expect{@bill.cbte_type}.to raise_error(Bravo::NullOrInvalidAttribute)
-    end
-
-    it "raise error on unknown iva cond" do
-      @bill.iva_cond = "Other"
+      @bill.iva_cond = 12
       expect{@bill.cbte_type}.to raise_error(Bravo::NullOrInvalidAttribute)
     end
 
     it "should fetch non Peso currency's exchange rate" do
       @bill.mon_id = 1
-      @bill.exchange_rate.should be > 0
+      p @bill.exchange_rate
+      @bill.exchange_rate.to_i.should be > 0
     end
 
     it "should return 1 for Peso currency" do
@@ -52,7 +48,7 @@ describe "Bill" do
     end
 
     it "should calculate the IVA array values" do
-      @bill.iva_cond = "RI"
+      @bill.iva_cond = 0
       @bill.mon_id = 0
       @bill.net = 100
       @bill.aliciva_id = 2
@@ -60,12 +56,15 @@ describe "Bill" do
       @bill.iva_sum.should == 21
       @bill.total.should == 121
     end
+
     it "should authorize a valid bill" do
       @bill.net = 100
       @bill.aliciva_id = 2
       @bill.doc_num = "30710151543"
+      @bill.iva_cond = 0
+      @bill.concept = 1
 
-      @bill.authorize
+      pp @bill.authorize
     end
   end
 end

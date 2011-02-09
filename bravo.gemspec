@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bravo}
-  s.version = "0.0.0"
+  s.version = "0.0.1"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Leandro Marcucci"]
-  s.date = %q{2011-01-07}
+  s.date = %q{2011-02-01}
   s.description = %q{Adaptador para el Web Service de Facturacion Electronica de AFIP}
   s.email = %q{leanucci@vurbia.com}
   s.extra_rdoc_files = [
@@ -18,14 +18,27 @@ Gem::Specification.new do |s|
   ]
   s.files = [
     ".document",
-    ".rspec",
     "Gemfile",
+    "Gemfile.lock",
     "LICENSE.txt",
     "README.rdoc",
     "Rakefile",
     "VERSION",
+    "autotest/discover.rb",
+    "bravo.gemspec",
     "lib/bravo.rb",
-    "spec/spec_helper.rb"
+    "lib/bravo/auth_data.rb",
+    "lib/bravo/authorizer.rb",
+    "lib/bravo/bill.rb",
+    "lib/bravo/constants.rb",
+    "lib/bravo/version.rb",
+    "spec/bravo/auth_data_spec.rb",
+    "spec/bravo/authorizer_spec.rb",
+    "spec/bravo/bill_spec.rb",
+    "spec/fixtures/cert.crt",
+    "spec/fixtures/pkey",
+    "spec/spec_helper.rb",
+    "wsaa-client.sh"
   ]
   s.homepage = %q{http://github.com/leanucci/bravo}
   s.licenses = ["MIT"]
@@ -35,7 +48,7 @@ Gem::Specification.new do |s|
   s.test_files = [
     "spec/bravo/auth_data_spec.rb",
     "spec/bravo/authorizer_spec.rb",
-    "spec/bravo/biller_spec.rb",
+    "spec/bravo/bill_spec.rb",
     "spec/spec_helper.rb"
   ]
 
@@ -44,20 +57,23 @@ Gem::Specification.new do |s|
     s.specification_version = 3
 
     if Gem::Version.new(Gem::VERSION) >= Gem::Version.new('1.2.0') then
-      s.add_runtime_dependency(%q<savon>, [">= 0"])
+      s.add_runtime_dependency(%q<savon>, ["~> 0.7.8"])
+      s.add_development_dependency(%q<ruby-debug>, [">= 0"])
       s.add_development_dependency(%q<rspec>, ["~> 2.4.0"])
       s.add_development_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_development_dependency(%q<jeweler>, ["~> 1.5.1"])
       s.add_development_dependency(%q<rcov>, [">= 0"])
     else
-      s.add_dependency(%q<savon>, [">= 0"])
+      s.add_dependency(%q<savon>, ["~> 0.7.8"])
+      s.add_dependency(%q<ruby-debug>, [">= 0"])
       s.add_dependency(%q<rspec>, ["~> 2.4.0"])
       s.add_dependency(%q<bundler>, ["~> 1.0.0"])
       s.add_dependency(%q<jeweler>, ["~> 1.5.1"])
       s.add_dependency(%q<rcov>, [">= 0"])
     end
   else
-    s.add_dependency(%q<savon>, [">= 0"])
+    s.add_dependency(%q<savon>, ["~> 0.7.8"])
+    s.add_dependency(%q<ruby-debug>, [">= 0"])
     s.add_dependency(%q<rspec>, ["~> 2.4.0"])
     s.add_dependency(%q<bundler>, ["~> 1.0.0"])
     s.add_dependency(%q<jeweler>, ["~> 1.5.1"])
