@@ -50,7 +50,7 @@ describe "Bill" do
     it "should calculate the IVA array values" do
       @bill.iva_cond = 0
       @bill.mon_id = 0
-      @bill.net = 100
+      @bill.net = 100.89
       @bill.aliciva_id = 2
 
       @bill.iva_sum.should == 21
