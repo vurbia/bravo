@@ -55,13 +55,9 @@ module Bravo
       if net == 0
         @iva_sum = 0
       else
-        @iva_sum = net * Bravo::ALIC_IVA[aliciva_id][1]
+        @iva_sum = (net * Bravo::ALIC_IVA[aliciva_id][1]).round(2)
       end
       @iva_sum
-    end
-
-    def total
-      net + iva_sum
     end
 
     def authorize
