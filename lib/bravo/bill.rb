@@ -2,7 +2,7 @@ module Bravo
   class Bill
     attr_reader :client, :body, :base_imp, :total
     attr_accessor :net, :doc_num, :iva_cond, :doc_type, :concept, :mon_id,
-                  :due_date, :from, :to, :aliciva_id
+                  :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta
 
     def body=(hash)
       @body = hash
@@ -55,7 +55,7 @@ module Bravo
       if net == 0
         @iva_sum = 0
       else
-        @iva_sum = (net * Bravo::ALIC_IVA[aliciva_id][1]).round(2)
+        @iva_sum = (net * Bravo::ALIC_IVA[aliciva_id][1])
       end
       @iva_sum
     end
@@ -117,9 +117,9 @@ module Bravo
       detail["CbteDesde"] = detail["CbteHasta"] = next_bill_number
 
       unless concept == 0
-        detail.merge!({"FchServDesde" => Time.new.strftime('%Y%m%d'),
-                      "FchServHasta" => Time.new.strftime('%Y%m%d'),
-                      "FchVtoPago" => Time.new.strftime('%Y%m%d')})
+        detail.merge!({"FchServDesde" => fch_serv_desde.nil? ? Time.new.strftime('%Y%m%d') : fch_serv_desde,
+                      "FchServHasta" => fch_serv_hasta.nil?  ? Time.new.strftime('%Y%m%d') : fch_serv_hasta,
+                      "FchVtoPago" => due_date.nil?          ? Time.new.strftime('%Y%m%d') : due_date})
       end
 
       self.body = self.body.merge(fecaereq)

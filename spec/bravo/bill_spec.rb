@@ -38,7 +38,6 @@ describe "Bill" do
 
     it "should fetch non Peso currency's exchange rate" do
       @bill.mon_id = 1
-      p @bill.exchange_rate
       @bill.exchange_rate.to_i.should be > 0
     end
 
@@ -53,8 +52,38 @@ describe "Bill" do
       @bill.net = 100.89
       @bill.aliciva_id = 2
 
-      @bill.iva_sum.should == 21
-      @bill.total.should == 121
+      @bill.iva_sum.should be_within(0.009).of(21.18)
+      @bill.total.should be_within(0.009).of(122.07)
+    end
+
+    it "should use give due date an service dates, or todays date" do
+      @bill.net = 100
+      @bill.aliciva_id = 2
+      @bill.doc_num = "30710151543"
+      @bill.iva_cond = 0
+      @bill.concept = 1
+
+      debugger
+
+      @bill.setup_bill
+
+      detail = @bill.body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]
+
+      detail["FchServDesde"].should == Time.new.strftime('%Y%m%d')
+      detail["FchServHasta"].should == Time.new.strftime('%Y%m%d')
+      detail["FchVtoPago"].should   == Time.new.strftime('%Y%m%d')
+
+      @bill.due_date       = Date.new(2011, 12, 10).strftime('%Y%m%d')
+      @bill.fch_serv_desde = Date.new(2011, 11, 01).strftime('%Y%m%d')
+      @bill.fch_serv_hasta = Date.new(2011, 11, 30).strftime('%Y%m%d')
+
+      @bill.setup_bill
+
+      detail = @bill.body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]
+
+      detail["FchServDesde"].should == "20111101"
+      detail["FchServHasta"].should == "20111130"
+      detail["FchVtoPago"].should   == "20111210"
     end
 
     it "should authorize a valid bill" do
