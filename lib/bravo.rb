@@ -4,7 +4,7 @@ require "bravo/version"
 require "bravo/constants"
 require "savon"
 require "ruby-debug"
-
+require "bravo/core_ext/float"
 module Bravo
 
   class NullOrInvalidAttribute < StandardError; end
@@ -13,6 +13,7 @@ module Bravo
   autoload :AuthData,     "bravo/auth_data"
   autoload :Bill,         "bravo/bill"
   autoload :Constants,    "bravo/constants"
+
 
   extend self
   attr_reader :pkey, :cert

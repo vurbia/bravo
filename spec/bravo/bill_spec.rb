@@ -52,8 +52,8 @@ describe "Bill" do
       @bill.net = 100.89
       @bill.aliciva_id = 2
 
-      @bill.iva_sum.should be_within(0.009).of(21.18)
-      @bill.total.should be_within(0.009).of(122.07)
+      @bill.iva_sum.should be_within(0.05).of(21.18)
+      @bill.total.should be_within(0.05).of(122.07)
     end
 
     it "should use give due date an service dates, or todays date" do
@@ -62,8 +62,6 @@ describe "Bill" do
       @bill.doc_num = "30710151543"
       @bill.iva_cond = 0
       @bill.concept = 1
-
-      debugger
 
       @bill.setup_bill
 

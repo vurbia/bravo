@@ -57,7 +57,7 @@ module Bravo
       else
         @iva_sum = (net * Bravo::ALIC_IVA[aliciva_id][1])
       end
-      @iva_sum
+      @iva_sum.round_up_with_precision(2)
     end
 
     def authorize
