@@ -6,8 +6,8 @@ module Bravo
         todays_datafile = "/tmp/bravo_#{Time.new.strftime('%d_%m_%Y')}.yml"
         opts = "-u https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
         keys_root = "/Users/leanucci/Xephstratus/afip/claves/"
-        opts += " -k #{keys_root}vurbia_dev_pkey"
-        opts += " -c #{keys_root}vurbia_wsfe_test.crt"
+        opts += " -k #{Bravo.pkey}"
+        opts += " -c #{Bravo.cert}"
 
         unless File.exists?(todays_datafile)
           %x(#{ENV["BUNDLE_PATH"]}/gems/bravo-#{Bravo::VERSION}/wsaa-client.sh #{opts})
