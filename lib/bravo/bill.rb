@@ -30,8 +30,7 @@ module Bravo
         self.body = self.body.merge({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
         soap.body = body
       end
-      rate = response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz]
-      rate.to_f
+      response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz].to_f
     end
 
     def total
