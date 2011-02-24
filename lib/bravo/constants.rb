@@ -36,8 +36,8 @@ module Bravo
     ["05", 0.21],
     ["06", 0.27]]
 
-  COND_IVA = [["RI", "Responsable Inscripto"],
-    ["CF", "Consumidor Final"]]
+  COND_IVA = {:responsable_inscripto => "RI",
+    :consumidor_final => "CF"}
 
   BILL_TYPE = {"RI" => {"RI" => "01",
     "CF" => "06"}}
