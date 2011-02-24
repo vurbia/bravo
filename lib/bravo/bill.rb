@@ -9,13 +9,11 @@ module Bravo
       Bravo::AuthData.fetch
       @client = Savon::Client.new(Bravo.service_url)
       @body = {"Auth" => Bravo.auth_hash}
-      self.documento  = attrs[:documento]  || Bravo.default_documento
+      @net  = attrs[:net] || 0
+      self.documento  = attrs[:documento] || Bravo.default_documento
       self.moneda     = attrs[:moneda]    || Bravo.default_moneda
       self.iva_cond   = attrs[:iva_cond]
-      self.concepto   = attrs[:concepto] || Bravo.default_concepto
-
-
-      @net          = attrs[:net]       || 0
+      self.concepto   = attrs[:concepto]  || Bravo.default_concepto
     end
 
     def cbte_type
