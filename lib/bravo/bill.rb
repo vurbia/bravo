@@ -1,7 +1,7 @@
 module Bravo
   class Bill
     attr_reader :client, :base_imp, :total
-    attr_accessor :net, :doc_num, :iva_cond, :documento, :concept, :moneda,
+    attr_accessor :net, :doc_num, :iva_cond, :documento, :concepto, :moneda,
                   :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
                   :body
 
@@ -9,10 +9,11 @@ module Bravo
       Bravo::AuthData.fetch
       @client = Savon::Client.new(Bravo.service_url)
       @body = {"Auth" => Bravo.auth_hash}
-      self.documento = attrs[:documento]  || Bravo.default_documento
-      self.moneda   = attrs[:moneda]    || Bravo.default_moneda
-      self.iva_cond = attrs[:iva_cond]
-      # self.concept  = attrs[:concept]   || Bravo.default_concept
+      self.documento  = attrs[:documento]  || Bravo.default_documento
+      self.moneda     = attrs[:moneda]    || Bravo.default_moneda
+      self.iva_cond   = attrs[:iva_cond]
+      self.concepto   = attrs[:concepto] || Bravo.default_concepto
+
 
       @net          = attrs[:net]       || 0
     end
@@ -74,7 +75,7 @@ module Bravo
                     "FeCabReq" => Bravo::Bill.header(cbte_type),
                     "FeDetReq" => {
                       "FECAEDetRequest" => {
-                        "Concepto"    => concept, #productos
+                        "Concepto"    => Bravo::CONCEPTOS[concepto],
                         "DocTipo"     => Bravo::DOCUMENTOS[documento],
                         "CbteFch"     => Time.new.strftime('%Y%m%d'),
                         "ImpTotConc"  => 0.00,
@@ -96,7 +97,7 @@ module Bravo
       detail["ImpTotal"]  = total
       detail["CbteDesde"] = detail["CbteHasta"] = next_bill_number
 
-      unless concept == 0
+      unless concepto == 0
         detail.merge!({"FchServDesde" => fch_serv_desde.nil? ? Time.new.strftime('%Y%m%d') : fch_serv_desde,
                       "FchServHasta" => fch_serv_hasta.nil?  ? Time.new.strftime('%Y%m%d') : fch_serv_hasta,
                       "FchVtoPago" => due_date.nil?          ? Time.new.strftime('%Y%m%d') : due_date})
