@@ -24,17 +24,14 @@ module Bravo
     end
 
     def exchange_rate
-      if moneda == :peso
-        return 1
-      else
-        response = client.fe_param_get_cotizacion do |soap|
-          soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-          self.body = self.body.merge({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
-          soap.body = body
-        end
-        rate = response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz]
-        rate.to_f
+      return 1 if moneda == :peso
+      response = client.fe_param_get_cotizacion do |soap|
+        soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+        self.body = self.body.merge({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
+        soap.body = body
       end
+      rate = response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz]
+      rate.to_f
     end
 
     def total
