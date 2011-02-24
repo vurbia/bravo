@@ -22,12 +22,12 @@ describe "Bill" do
     end
 
     it "should calculate it's cbte_tipo for Responsable Inscripto" do
-      @bill.iva_cond = 0
+      @bill.iva_cond = :responsable_inscripto
       @bill.cbte_type.should == "01"
     end
 
     it "should calculate it's cbte_tipo for Consumidor Final" do
-      @bill.iva_cond = 1
+      @bill.iva_cond = :consumidor_final
       @bill.cbte_type.should == "06"
     end
 
@@ -47,7 +47,7 @@ describe "Bill" do
     end
 
     it "should calculate the IVA array values" do
-      @bill.iva_cond = 0
+      @bill.iva_cond = :responsable_inscripto
       @bill.mon_id = 0
       @bill.net = 100.89
       @bill.aliciva_id = 2
@@ -60,7 +60,7 @@ describe "Bill" do
       @bill.net = 100
       @bill.aliciva_id = 2
       @bill.doc_num = "30710151543"
-      @bill.iva_cond = 0
+      @bill.iva_cond = :responsable_inscripto
       @bill.concept = 1
 
       @bill.setup_bill
@@ -88,7 +88,7 @@ describe "Bill" do
       @bill.net = 100
       @bill.aliciva_id = 2
       @bill.doc_num = "30710151543"
-      @bill.iva_cond = 0
+      @bill.iva_cond = :responsable_inscripto
       @bill.concept = 1
 
       pp @bill.authorize

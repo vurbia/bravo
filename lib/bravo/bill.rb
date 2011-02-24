@@ -18,9 +18,7 @@ module Bravo
     end
 
     def cbte_type
-      if iva_cond < Bravo::COND_IVA.size
-        type = Bravo::BILL_TYPE[Bravo.own_iva_cond][Bravo::COND_IVA[self.iva_cond][0]]
-      end
+      type = Bravo::BILL_TYPE[Bravo.own_iva_cond][Bravo::COND_IVA[iva_cond]]
       raise NullOrInvalidAttribute.new, "Please choose a valid document type." if type.nil?
       type
     end
