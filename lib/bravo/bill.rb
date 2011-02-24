@@ -108,14 +108,13 @@ module Bravo
 
     def next_bill_number
       resp = client.fe_comp_ultimo_autorizado do |s|
-               s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-               s.body = {"Auth" => Bravo.auth_hash,
-                         "PtoVta" => Bravo.sale_point,
-                         "CbteTipo" => "1"}
-             end
+        s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+        s.body = {"Auth" => Bravo.auth_hash,
+          "PtoVta" => Bravo.sale_point,
+          "CbteTipo" => "1"}
+      end
 
-      @nro = resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro]
-      @nro.to_i + 1
+      resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
     end
 
     private
