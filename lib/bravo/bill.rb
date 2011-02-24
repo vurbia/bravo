@@ -1,12 +1,9 @@
 module Bravo
   class Bill
-    attr_reader :client, :body, :base_imp, :total
+    attr_reader :client, :base_imp, :total
     attr_accessor :net, :doc_num, :iva_cond, :doc_type, :concept, :mon_id,
-                  :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta
-
-    def body=(hash)
-      @body = hash
-    end
+                  :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
+                  :body
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
