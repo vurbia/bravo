@@ -43,12 +43,7 @@ module Bravo
     end
 
     def total
-      if net == 0
-        @total = 0
-      else
-        @total = net + iva_sum
-      end
-      @total
+      @total = net.zero? ? 0 : net + iva_sum
     end
 
     def iva_sum
