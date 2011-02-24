@@ -21,7 +21,7 @@ module Bravo
     end
 
     def cbte_type
-      if self.iva_cond < Bravo::COND_IVA.size
+      if iva_cond < Bravo::COND_IVA.size
         type = Bravo::BILL_TYPE[Bravo.own_iva_cond][Bravo::COND_IVA[self.iva_cond][0]]
       end
       raise NullOrInvalidAttribute.new, "Please choose a valid document type." if type.nil?
@@ -94,11 +94,11 @@ module Bravo
                     "FeCabReq" => Bravo::Bill.header(cbte_type),
                     "FeDetReq" => {
                       "FECAEDetRequest" => {
-                        "Concepto"    => Bravo::CONCEPTO[concept][0], #productos
-                        "DocTipo"     => Bravo::DOCTIPO[doc_type][0],
+                        "Concepto"    => concept, #productos
+                        "DocTipo"     => doc_type,
                         "CbteFch"     => Time.new.strftime('%Y%m%d'),
                         "ImpTotConc"  => 0.00,
-                        "MonId"       => Bravo::MON_ID[mon_id][0],
+                        "MonId"       => Bravo::MON_ID[mon_id],
                         "MonCotiz"    => exchange_rate,
                         "ImpOpEx"     => 0.00,
                         "ImpTrib"     => 0.00,
