@@ -98,12 +98,13 @@ module Bravo
       detail["CbteDesde"] = detail["CbteHasta"] = next_bill_number
 
       unless concepto == 0
-        detail.merge!({"FchServDesde" => fch_serv_desde.nil? ? Time.new.strftime('%Y%m%d') : fch_serv_desde,
-                      "FchServHasta" => fch_serv_hasta.nil?  ? Time.new.strftime('%Y%m%d') : fch_serv_hasta,
-                      "FchVtoPago" => due_date.nil?          ? Time.new.strftime('%Y%m%d') : due_date})
+        time = Time.new.strftime('%Y%m%d')
+        detail.merge!({"FchServDesde" => fch_serv_desde || time,
+                      "FchServHasta"  => fch_serv_hasta || time,
+                      "FchVtoPago"    => due_date       || time})
       end
 
-      self.body = self.body.merge(fecaereq)
+      body.merge!(fecaereq)
     end
 
     def next_bill_number
