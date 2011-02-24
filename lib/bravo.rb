@@ -17,7 +17,7 @@ module Bravo
 
   extend self
   attr_accessor :cuit, :sale_point, :service_url, :default_doc_type, :pkey, :cert,
-                :default_concept, :default_mon_id, :own_iva_cond
+    :default_concept, :default_mon_id, :own_iva_cond
 
   def auth_hash
     {"Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit}
