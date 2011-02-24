@@ -10,7 +10,7 @@ module Bravo
         opts += " -c #{Bravo.cert}"
 
         unless File.exists?(todays_datafile)
-          %x(#{ENV["BUNDLE_PATH"]}/gems/bravo-#{Bravo::VERSION}/wsaa-client.sh #{opts})
+          %x(#{File.dirname(__FILE__)}/../../wsaa-client.sh #{opts})
         end
 
         @data = YAML.load_file(todays_datafile).each do |k, v|
