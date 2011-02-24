@@ -91,7 +91,7 @@ module Bravo
 
       detail = fecaereq["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]
 
-      detail["DocNro"]    = "#{doc_num}"
+      detail["DocNro"]    = doc_num
       detail["ImpNeto"]   = net.to_f
       detail["ImpIVA"]    = iva_sum
       detail["ImpTotal"]  = total
