@@ -26,8 +26,7 @@ module Bravo
       return 1 if moneda == :peso
       response = client.fe_param_get_cotizacion do |soap|
         soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        self.body = self.body.merge({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
-        soap.body = body
+        soap.body = body.merge!({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
       end
       response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz].to_f
     end
