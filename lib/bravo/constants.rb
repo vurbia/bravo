@@ -23,7 +23,7 @@ module Bravo
 
   CONCEPTO = {"01"=>"Productos", "02"=>"Servicios", "03"=>"Productos y Servicios"}
 
-  DOCUMENTOS = {"80"=>"CUIT", "86"=>"CUIL", "87"=>"CDI", "89"=>"LE", "90"=>"LC", "91"=>"CI Extranjera", "92"=>"en tramite", "93"=>"Acta Nacimiento", "95"=>"CI Bs. As. RNP", "96"=>"DNI", "94"=>"Pasaporte", "99"=>"Doc. (Otro)"}
+  DOCUMENTOS = {"CUIT"=>"80", "CUIL"=>"86", "CDI"=>"87", "LE"=>"89", "LC"=>"90", "CI Extranjera"=>"91", "en tramite"=>"92", "Acta Nacimiento"=>"93", "CI Bs. As. RNP"=>"95", "DNI"=>"96", "Pasaporte"=>"94", "Doc. (Otro)"=>"99"}
 
   MONEDAS = {
     :peso  => {:codigo => "PES", :nombre =>"Pesos Argentinos"},

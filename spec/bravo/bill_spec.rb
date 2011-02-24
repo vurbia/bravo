@@ -17,7 +17,7 @@ describe "Bill" do
       ["Token", "Sign", "Cuit"].each do |key|
         @bill.body["Auth"][key].should_not == nil
       end
-      @bill.doc_type.should == Bravo.default_doc_type
+      @bill.documento.should == Bravo.default_documento
       @bill.moneda.should == Bravo.default_moneda
     end
 
