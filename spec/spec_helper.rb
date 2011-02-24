@@ -22,6 +22,6 @@ Bravo.cuit = "30711034389"
 Bravo.sale_point = "0002"
 Bravo.service_url = "http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
 Bravo.default_concept = 2  # prod y ss
-Bravo.default_doc_type = "80" # cuit
+Bravo.default_documento = "CUIT"
 Bravo.default_moneda = :peso
 Bravo.own_iva_cond = :responsable_inscripto
