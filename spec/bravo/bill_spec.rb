@@ -61,7 +61,7 @@ describe "Bill" do
       @bill.aliciva_id = 2
       @bill.doc_num = "30710151543"
       @bill.iva_cond = :responsable_inscripto
-      @bill.concept = 1
+      @bill.concepto = "Servicios"
 
       @bill.setup_bill
 
@@ -89,7 +89,7 @@ describe "Bill" do
       @bill.aliciva_id = 2
       @bill.doc_num = "30710151543"
       @bill.iva_cond = :responsable_inscripto
-      @bill.concept = 1
+      @bill.concepto = "Servicios"
 
       pp @bill.authorize
     end
