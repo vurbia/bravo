@@ -84,14 +84,12 @@ describe "Bill" do
       detail["FchVtoPago"].should   == "20111210"
     end
 
-    it "should authorize a valid bill" do
+    pending "should authorize a valid bill" do
       @bill.net = 100
       @bill.aliciva_id = 2
       @bill.doc_num = "30710151543"
       @bill.iva_cond = :responsable_inscripto
       @bill.concepto = "Servicios"
-
-      pp @bill.authorize
     end
   end
 end
