@@ -38,11 +38,7 @@ module Bravo
     end
 
     def iva_sum
-      if net == 0
-        @iva_sum = 0
-      else
-        @iva_sum = (net * Bravo::ALIC_IVA[aliciva_id][1])
-      end
+      @iva_sum = net * Bravo::ALIC_IVA[aliciva_id][1]
       @iva_sum.round_up_with_precision(2)
     end
 
