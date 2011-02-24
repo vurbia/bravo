@@ -1,7 +1,7 @@
 module Bravo
   class Bill
     attr_reader :client, :base_imp, :total
-    attr_accessor :net, :doc_num, :iva_cond, :doc_type, :concept, :mon_id,
+    attr_accessor :net, :doc_num, :iva_cond, :doc_type, :concept, :moneda,
                   :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
                   :body
 
@@ -10,7 +10,7 @@ module Bravo
       @client = Savon::Client.new(Bravo.service_url)
       @body = {"Auth" => Bravo.auth_hash}
       self.doc_type = attrs[:doc_type]  || Bravo.default_doc_type
-      self.mon_id   = attrs[:mon_id]    || Bravo.default_mon_id
+      self.moneda   = attrs[:moneda]    || Bravo.default_moneda
       self.iva_cond = attrs[:iva_cond]
       # self.concept  = attrs[:concept]   || Bravo.default_concept
 
@@ -24,12 +24,12 @@ module Bravo
     end
 
     def exchange_rate
-      if mon_id == 0
+      if moneda == :peso
         return 1
       else
         response = client.fe_param_get_cotizacion do |soap|
           soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-          self.body = self.body.merge({"MonId" => Bravo::MON_ID[mon_id][0]})
+          self.body = self.body.merge({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
           soap.body = body
         end
         rate = response.to_hash[:fe_param_get_cotizacion_response][:fe_param_get_cotizacion_result][:result_get][:mon_cotiz]
@@ -88,7 +88,7 @@ module Bravo
                         "DocTipo"     => doc_type,
                         "CbteFch"     => Time.new.strftime('%Y%m%d'),
                         "ImpTotConc"  => 0.00,
-                        "MonId"       => Bravo::MON_ID[mon_id],
+                        "MonId"       => Bravo::MONEDAS[moneda][:codigo],
                         "MonCotiz"    => exchange_rate,
                         "ImpOpEx"     => 0.00,
                         "ImpTrib"     => 0.00,

@@ -18,7 +18,7 @@ describe "Bill" do
         @bill.body["Auth"][key].should_not == nil
       end
       @bill.doc_type.should == Bravo.default_doc_type
-      @bill.mon_id.should == Bravo.default_mon_id
+      @bill.moneda.should == Bravo.default_moneda
     end
 
     it "should calculate it's cbte_tipo for Responsable Inscripto" do
@@ -37,18 +37,18 @@ describe "Bill" do
     end
 
     it "should fetch non Peso currency's exchange rate" do
-      @bill.mon_id = 1
+      @bill.moneda = :dolar
       @bill.exchange_rate.to_i.should be > 0
     end
 
     it "should return 1 for Peso currency" do
-      @bill.mon_id = 0
+      @bill.moneda = :peso
       @bill.exchange_rate.should == 1
     end
 
     it "should calculate the IVA array values" do
       @bill.iva_cond = :responsable_inscripto
-      @bill.mon_id = 0
+      @bill.moneda = :peso
       @bill.net = 100.89
       @bill.aliciva_id = 2
 

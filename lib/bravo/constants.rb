@@ -25,11 +25,13 @@ module Bravo
 
   DOCTIPO = {"80"=>"CUIT", "86"=>"CUIL", "87"=>"CDI", "89"=>"LE", "90"=>"LC", "91"=>"CI Extranjera", "92"=>"en tramite", "93"=>"Acta Nacimiento", "95"=>"CI Bs. As. RNP", "96"=>"DNI", "94"=>"Pasaporte", "99"=>"Doc. (Otro)"}
 
-  MON_ID = [["PES", "Pesos Argentinos"],
-    ["DOL", "Dolar Estadounidense"],
-    ["012", "Real"],
-    ["060", "Euro"],
-    ["049", "Gramos de Oro Fino"]]
+  MONEDAS = {
+    :peso  => {:codigo => "PES", :nombre =>"Pesos Argentinos"},
+    :dolar => {:codigo => "DOL", :nombre =>"Dolar Estadounidense"},
+    :real  => {:codigo => "012", :nombre =>"Real"},
+    :euro  => {:codigo => "060", :nombre =>"Euro"},
+    :oro   => {:codigo => "049", :nombre =>"Gramos de Oro Fino"}
+  }
 
   ALIC_IVA = [["03", 0],
     ["04", 0.105],
