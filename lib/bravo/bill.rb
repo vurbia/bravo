@@ -122,7 +122,7 @@ module Bravo
     class << self
       def header(cbte_type)
         {"CantReg" => "1", #todo sacado de la factura
-         "CbteTipo" => "#{cbte_type}",
+         "CbteTipo" => cbte_type,
          "PtoVta" => "2"}
       end
     end
