@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Bravo
   CBTE_TIPO = {
     "01"=>"Factura A",
