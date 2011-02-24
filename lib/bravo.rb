@@ -1,9 +1,7 @@
-require "rubygems"
 require "bundler/setup"
 require "bravo/version"
 require "bravo/constants"
 require "savon"
-require "ruby-debug"
 require "bravo/core_ext/float"
 module Bravo
 
