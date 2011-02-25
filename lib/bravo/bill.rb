@@ -69,13 +69,15 @@ module Bravo
     end
 
     def setup_bill
+      today = Time.new.strftime('%Y%m%d')
+
       fecaereq = {"FeCAEReq" => {
                     "FeCabReq" => Bravo::Bill.header(cbte_type),
                     "FeDetReq" => {
                       "FECAEDetRequest" => {
                         "Concepto"    => Bravo::CONCEPTOS[concepto],
                         "DocTipo"     => Bravo::DOCUMENTOS[documento],
-                        "CbteFch"     => Time.new.strftime('%Y%m%d'),
+                        "CbteFch"     => today,
                         "ImpTotConc"  => 0.00,
                         "MonId"       => Bravo::MONEDAS[moneda][:codigo],
                         "MonCotiz"    => exchange_rate,
@@ -96,10 +98,9 @@ module Bravo
       detail["CbteDesde"] = detail["CbteHasta"] = next_bill_number
 
       unless concepto == 0
-        time = Time.new.strftime('%Y%m%d')
-        detail.merge!({"FchServDesde" => fch_serv_desde || time,
-                      "FchServHasta"  => fch_serv_hasta || time,
-                      "FchVtoPago"    => due_date       || time})
+        detail.merge!({"FchServDesde" => fch_serv_desde || today,
+                      "FchServHasta"  => fch_serv_hasta || today,
+                      "FchVtoPago"    => due_date       || today})
       end
 
       body.merge!(fecaereq)
