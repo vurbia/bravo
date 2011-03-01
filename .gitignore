@@ -25,3 +25,5 @@ tmtags
 .rspec
 log/
 log/*.log
+fixtures/
+fixtures/*
