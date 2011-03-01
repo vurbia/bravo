@@ -100,7 +100,7 @@ module Bravo
     end
 
     def authorized?
-      self.response.nil? ? false : self.response.header_result == "A" && self.response.detail_result == "A"
+      !response.nil? && response.header_result == "A" && response.detail_result == "A"
     end
 
     private
