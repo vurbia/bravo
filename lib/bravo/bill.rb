@@ -3,7 +3,7 @@ module Bravo
     attr_reader :client, :base_imp, :total
     attr_accessor :net, :doc_num, :iva_cond, :documento, :concepto, :moneda,
                   :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
-                  :body
+                  :body, :response
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
@@ -48,24 +48,8 @@ module Bravo
 
       response = response.to_hash
 
-      detail_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_det_resp][:fecae_det_response]
-      detail = body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]
-
-      detail["Resultado"] = detail_response[:resultado]
-      detail["CaeFechVto"] = detail_response[:cae_fch_vto]
-      detail["CAE"] = detail_response[:cae]
-
-      body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"] = detail
-
-      header_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_cab_resp]
-      header = body["FeCAEReq"]["FeCabReq"]
-
-      header["Resultado"] = header_response[:resultado]
-      header["Reproceso"] = header_response[:reproceso]
-      header["FchProceso"] = header_response[:fch_proceso]
-
-      body["FeCAEReq"]["FeCabReq"] = header
-      body.to_hash
+      setup_response(response)
+      self.authorized?
     end
 
     def setup_bill
@@ -109,22 +93,30 @@ module Bravo
     def next_bill_number
       resp = client.fe_comp_ultimo_autorizado do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = {"Auth" => Bravo.auth_hash,
-          "PtoVta" => Bravo.sale_point,
-          "CbteTipo" => "1"}
+        s.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => "1"}
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
     end
 
+    def authorized?
+      self.response.nil? ? false : self.response.header_result == "A" && self.response.detail_result == "A"
+    end
+
     private
 
     class << self
-      def header(cbte_type)
-        {"CantReg" => "1", #todo sacado de la factura
-         "CbteTipo" => cbte_type,
-         "PtoVta" => "2"}
+      def header(cbte_type)#todo sacado de la factura
+        {"CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => "2"}
       end
+    end
+
+    def setup_response(response)
+      detail_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_det_resp][:fecae_det_response]
+      header_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_cab_resp]
+
+      response_struct = Struct.new("Response", :header_result, :detail_result, :cae, :cae_due_date, :authorized_on)
+      self.response = response_struct.new(header_response[:resultado], detail_response[:resultado], detail_response[:cae], detail_response[:cae_fch_vto], header_response[:fch_proceso])
     end
   end
 end
