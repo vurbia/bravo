@@ -1,0 +1,3 @@
+module Bravo
+  VERSION = "0.0.1"
+end
