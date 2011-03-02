@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Leandro Marcucci"]
-  s.date = %q{2011-03-01}
+  s.date = %q{2011-03-02}
   s.description = %q{Adaptador para el Web Service de Facturacion Electronica de AFIP}
   s.email = %q{leanucci@vurbia.com}
   s.extra_rdoc_files = [
@@ -36,8 +36,6 @@ Gem::Specification.new do |s|
     "spec/bravo/auth_data_spec.rb",
     "spec/bravo/authorizer_spec.rb",
     "spec/bravo/bill_spec.rb",
-    "spec/fixtures/cert.crt",
-    "spec/fixtures/pkey",
     "spec/spec_helper.rb",
     "wsaa-client.sh"
   ]
