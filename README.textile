@@ -50,5 +50,4 @@ h2. Agradecimientos
 
 * Emilio Tagua por sus consejos y contribuciones.
 
-Copyright (c) 2010 Leandro Marcucci  & Vurbia Technologies International Inc. See LICENSE.txt for
-further details.
+Copyright (c) 2010 Leandro Marcucci  & Vurbia Technologies International Inc. See LICENSE.txt for further details.
