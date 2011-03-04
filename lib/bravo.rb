@@ -3,6 +3,7 @@ require "bravo/version"
 require "bravo/constants"
 require "savon"
 require "bravo/core_ext/float"
+require "bravo/core_ext/hash"
 module Bravo
 
   class NullOrInvalidAttribute < StandardError; end
