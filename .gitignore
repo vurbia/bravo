@@ -27,3 +27,4 @@ log/
 log/*.log
 fixtures/
 fixtures/*
+*.gem
