@@ -13,7 +13,7 @@ require 'jeweler'
 Jeweler::Tasks.new do |gem|
   # gem is a Gem::Specification... see http://docs.rubygems.org/read/chapter/20 for more options
   gem.name = "bravo"
-  gem.homepage = "http://github.com/leanucci/bravo"
+  gem.homepage = "http://github.com/Vurbia/Bravo"
   gem.license = "MIT"
   gem.summary = "Adaptador AFIP wsfe."
   gem.description = "Adaptador para el Web Service de Facturacion Electronica de AFIP"
