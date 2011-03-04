@@ -46,9 +46,7 @@ module Bravo
         soap.body = body
       end
 
-      response = response.to_hash
-
-      setup_response(response)
+      setup_response(response.to_hash)
       self.authorized?
     end
 
@@ -112,11 +110,23 @@ module Bravo
     end
 
     def setup_response(response)
-      detail_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_det_resp][:fecae_det_response]
-      header_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_cab_resp]
+      header_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_cab_resp].symbolize_keys
+      detail_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_det_resp][:fecae_det_response].symbolize_keys
 
-      response_struct = Struct.new("Response", :header_result, :detail_result, :cae, :cae_due_date, :authorized_on)
-      self.response = response_struct.new(header_response[:resultado], detail_response[:resultado], detail_response[:cae], detail_response[:cae_fch_vto], header_response[:fch_proceso])
+      iva = self.body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]["Iva"]["AlicIva"].underscore_keys!
+
+      detail_response.merge!(iva.symbolize_keys!)
+
+      response_hash = {:header_result => header_response.delete(:resultado),
+                       :detail_result => detail_response.delete(:resultado),
+                       :cae_due_date  => detail_response.delete(:cae_fch_vto),
+                       :authorized_on => header_response.delete(:fch_proceso),
+                       :iva_id        => detail_response.delete(:id),
+                       :iva_importe   => detail_response.delete(:importe)
+                       }.merge!(header_response).merge!(detail_response)
+
+      keys, values  = response_hash.to_a.transpose
+      self.response = Struct.new("Response", *keys).new(*values)
     end
   end
 end

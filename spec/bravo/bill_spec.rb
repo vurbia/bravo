@@ -96,7 +96,15 @@ describe "Bill" do
       @bill.authorize.should == true
 
       @bill.authorized?.should == true
-      @bill.response.cae.length.should == 14
+
+      response = @bill.response
+
+      response.cae.length.should == 14
+
+      pp response
+
+      response.length.should == 19
+
     end
   end
 end
