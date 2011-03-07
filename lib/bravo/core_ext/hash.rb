@@ -12,7 +12,7 @@ class Hash
 
   def underscore_keys!
     keys.each do |key|
-      self[(key.downcase rescue key) || key] = delete(key)
+      self[(key.underscore rescue key) || key] = delete(key)
     end
     self
   end
