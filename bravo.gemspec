@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{bravo}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Leandro Marcucci"]
-  s.date = %q{2011-03-04}
+  s.date = %q{2011-03-07}
   s.description = %q{Adaptador para el Web Service de Facturacion Electronica de AFIP}
   s.email = %q{leanucci@vurbia.com}
   s.extra_rdoc_files = [
@@ -34,6 +34,7 @@ Gem::Specification.new do |s|
     "lib/bravo/constants.rb",
     "lib/bravo/core_ext/float.rb",
     "lib/bravo/core_ext/hash.rb",
+    "lib/bravo/core_ext/string.rb",
     "lib/bravo/version.rb",
     "spec/bravo/auth_data_spec.rb",
     "spec/bravo/authorizer_spec.rb",

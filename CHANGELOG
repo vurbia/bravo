@@ -1,3 +1,7 @@
+*Bravo 0.3.0 (March 07, 2011)*
+
+* Bill#response returns the full list of parameters passed and returned by FECAESolicitar [leanucci]
+
 *Bravo 0.2.0 (March 04, 2011)*
 
 * Bill#response returns a complete hash from WSFE response [leanucci]
