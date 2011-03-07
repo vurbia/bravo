@@ -2,7 +2,7 @@ module Bravo
   class Bill
     attr_reader :client, :base_imp, :total
     attr_accessor :net, :doc_num, :iva_cond, :documento, :concepto, :moneda,
-                  :due_date, :from, :to, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
+                  :due_date, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
                   :body, :response
 
     def initialize(attrs = {})
