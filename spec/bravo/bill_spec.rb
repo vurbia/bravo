@@ -91,20 +91,14 @@ describe "Bill" do
       @bill.iva_cond = :responsable_inscripto
       @bill.concepto = "Servicios"
 
-      @bill.authorized?.should == false
-
-      @bill.authorize.should == true
-
-      @bill.authorized?.should == true
+      @bill.authorized?.should  == false
+      @bill.authorize.should    == true
+      @bill.authorized?.should  == true
 
       response = @bill.response
 
+      response.length.should     == 19
       response.cae.length.should == 14
-
-      pp response
-
-      response.length.should == 19
-
     end
   end
 end
