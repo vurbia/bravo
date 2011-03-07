@@ -97,7 +97,7 @@ describe "Bill" do
 
       response = @bill.response
 
-      response.length.should     == 19
+      response.length.should     == 28
       response.cae.length.should == 14
     end
   end

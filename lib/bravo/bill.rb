@@ -7,9 +7,9 @@ module Bravo
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      @client = Savon::Client.new(Bravo.service_url)
-      @body = {"Auth" => Bravo.auth_hash}
-      @net  = attrs[:net] || 0
+      @client         = Savon::Client.new(Bravo.service_url)
+      @body           = {"Auth" => Bravo.auth_hash}
+      @net            = attrs[:net] || 0
       self.documento  = attrs[:documento] || Bravo.default_documento
       self.moneda     = attrs[:moneda]    || Bravo.default_moneda
       self.iva_cond   = attrs[:iva_cond]
@@ -110,20 +110,32 @@ module Bravo
     end
 
     def setup_response(response)
-      header_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_cab_resp].symbolize_keys
-      detail_response = response[:fecae_solicitar_response][:fecae_solicitar_result][:fe_det_resp][:fecae_det_response].symbolize_keys
+      # TODO: turn this into an all-purpose Response class
 
-      iva = self.body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]["Iva"]["AlicIva"].underscore_keys!
+      result          = response[:fecae_solicitar_response][:fecae_solicitar_result]
 
-      detail_response.merge!(iva.symbolize_keys!)
+      response_header = result[:fe_cab_resp]
+      response_detail = result[:fe_det_resp][:fecae_det_response]
 
-      response_hash = {:header_result => header_response.delete(:resultado),
-                       :detail_result => detail_response.delete(:resultado),
-                       :cae_due_date  => detail_response.delete(:cae_fch_vto),
-                       :authorized_on => header_response.delete(:fch_proceso),
-                       :iva_id        => detail_response.delete(:id),
-                       :iva_importe   => detail_response.delete(:importe)
-                       }.merge!(header_response).merge!(detail_response)
+      request_header  = body["FeCAEReq"]["FeCabReq"].underscore_keys.symbolize_keys
+      request_detail  = body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"].underscore_keys.symbolize_keys
+
+      iva             = request_detail.delete(:iva)["AlicIva"].underscore_keys.symbolize_keys
+
+      request_detail.merge!(iva)
+
+      response_hash = {:header_result => response_header.delete(:resultado),
+                       :authorized_on => response_header.delete(:fch_proceso),
+                       :detail_result => response_detail.delete(:resultado),
+                       :cae_due_date  => response_detail.delete(:cae_fch_vto),
+                       :cae           => response_detail.delete(:cae),
+                       :iva_id        => request_detail.delete(:id),
+                       :iva_importe   => request_detail.delete(:importe),
+                       :moneda        => request_detail.delete(:mon_id),
+                       :cotizacion    => request_detail.delete(:mon_cotiz),
+                       :iva_base_imp  => request_detail.delete(:base_imp),
+                       :doc_num       => request_detail.delete(:doc_nro)
+                       }.merge!(request_header).merge!(request_detail)
 
       keys, values  = response_hash.to_a.transpose
       self.response = Struct.new("Response", *keys).new(*values)
