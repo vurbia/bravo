@@ -13,7 +13,6 @@ module Bravo
 
         todays_datafile = "/tmp/bravo_#{Time.new.strftime('%d_%m_%Y')}.yml"
         opts = "-u https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
-        keys_root = "/Users/leanucci/Xephstratus/afip/claves/"
         opts += " -k #{Bravo.pkey}"
         opts += " -c #{Bravo.cert}"
 
