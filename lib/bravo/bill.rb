@@ -91,7 +91,7 @@ module Bravo
     def next_bill_number
       resp = client.fe_comp_ultimo_autorizado do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => "1"}
+        s.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type}
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
@@ -105,7 +105,7 @@ module Bravo
 
     class << self
       def header(cbte_type)#todo sacado de la factura
-        {"CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => "2"}
+        {"CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => Bravo.sale_point}
       end
     end
 
