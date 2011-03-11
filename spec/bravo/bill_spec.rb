@@ -84,21 +84,23 @@ describe "Bill" do
       detail["FchVtoPago"].should   == "20111210"
     end
 
-    it "should authorize a valid bill" do
-      @bill.net = 1000000
-      @bill.aliciva_id = 2
-      @bill.doc_num = "30710151543"
-      @bill.iva_cond = :responsable_inscripto
-      @bill.concepto = "Servicios"
+    Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
+      it "should authorize a valid bill for #{target_iva_cond.to_s}" do
+        @bill.net = 1000000
+        @bill.aliciva_id = 2
+        @bill.doc_num = "30710151543"
+        @bill.iva_cond = target_iva_cond
+        @bill.concepto = "Servicios"
 
-      @bill.authorized?.should  == false
-      @bill.authorize.should    == true
-      @bill.authorized?.should  == true
+        @bill.authorized?.should  == false
+        @bill.authorize.should    == true
+        @bill.authorized?.should  == true
 
-      response = @bill.response
+        response = @bill.response
 
-      response.length.should     == 28
-      response.cae.length.should == 14
+        response.length.should     == 28
+        response.cae.length.should == 14
+      end
     end
   end
 end
