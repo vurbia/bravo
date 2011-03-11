@@ -33,10 +33,7 @@ module Bravo
     :oro   => {:codigo => "049", :nombre =>"Gramos de Oro Fino"}
   }
 
-  ALIC_IVA = [["03", 0],
-    ["04", 0.105],
-    ["05", 0.21],
-    ["06", 0.27]]
+  ALIC_IVA = [["03", 0], ["04", 0.105], ["05", 0.21], ["06", 0.27]]
 
-  BILL_TYPE = {:responsable_inscripto => {:responsable_inscripto => "01", :consumidor_final => "06"}}
+  BILL_TYPE = {:responsable_inscripto => {:responsable_inscripto => "01", :consumidor_final => "06", :exento => "06", :responsable_monotributo => "06"}}
 end
