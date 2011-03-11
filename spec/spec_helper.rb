@@ -11,8 +11,6 @@ end
 # in ./support/ and its subdirectories.
 Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
 
-Savon::Request.log = false unless ENV["VERBOSE"] == "true"
-
 Bravo.pkey = "spec/fixtures/pkey"
 Bravo.cert = "spec/fixtures/cert.crt"
 Bravo.cuit = ENV["CUIT"] || raise(Bravo::NullOrInvalidAttribute.new, "Please set CUIT env variable.")

@@ -17,9 +17,11 @@ module Bravo
 
   extend self
   attr_accessor :cuit, :sale_point, :service_url, :default_documento, :pkey, :cert,
-    :default_concepto, :default_moneda, :own_iva_cond
+    :default_concepto, :default_moneda, :own_iva_cond, :verbose
 
   def auth_hash
     {"Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit}
   end
+
+  Savon::Request.log = false unless (Bravo.verbose == "true") || (ENV["VERBOSE"] == true)
 end
