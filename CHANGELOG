@@ -1,3 +1,11 @@
+*Bravo 0.4.0 (March 11, 2011)*
+
+* Errors will be raised if CERT or PKEY are not present [miloops]
+* Removed various hardcoded options [leanucci]
+* Added support for more iva conditions [miloops]
+* Log verbosity switch [leanucci]
+* Better spec coverage
+
 *Bravo 0.3.0 (March 07, 2011)*
 
 * Bill#response returns the full list of parameters passed and returned by FECAESolicitar [leanucci]
