@@ -138,7 +138,7 @@ module Bravo
                        }.merge!(request_header).merge!(request_detail)
 
       keys, values  = response_hash.to_a.transpose
-      self.response = Struct.new("Response", *keys).new(*values)
+      self.response = (defined?(Response) ? Response : Struct.new("Response", *keys)).new(*values)
     end
   end
 end
