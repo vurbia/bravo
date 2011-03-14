@@ -1,4 +1,8 @@
-*Bravo 0.4.0 (March 11, 2011)*
+*Bravo 0.3.6 (March 14, 2011) *
+
+* Hash extensions play nice with Rails 2.3 ruby 1.9 [miloops]
+
+*Bravo 0.3.5 (March 11, 2011)* (in version 0.3.5 this is listed as 0.4.0)
 
 * Errors will be raised if CERT or PKEY are not present [miloops]
 * Removed various hardcoded options [leanucci]
