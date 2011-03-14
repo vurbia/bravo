@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Leandro Marcucci"]
-  s.date = %q{2011-03-11}
+  s.date = %q{2011-03-14}
   s.description = %q{Adaptador para el Web Service de Facturacion Electronica de AFIP}
   s.email = %q{leanucci@vurbia.com}
   s.extra_rdoc_files = [
@@ -45,7 +45,7 @@ Gem::Specification.new do |s|
   s.homepage = %q{http://github.com/Vurbia/Bravo}
   s.licenses = ["MIT"]
   s.require_paths = ["lib"]
-  s.rubygems_version = %q{1.6.0}
+  s.rubygems_version = %q{1.6.1}
   s.summary = %q{Adaptador AFIP wsfe.}
   s.test_files = [
     "spec/bravo/auth_data_spec.rb",
