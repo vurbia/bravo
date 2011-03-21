@@ -12,7 +12,7 @@ module Bravo
         end
 
         todays_datafile = "/tmp/bravo_#{Time.new.strftime('%d_%m_%Y')}.yml"
-        opts = "-u https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
+        opts = "-u #{Bravo.auth_url}"
         opts += " -k #{Bravo.pkey}"
         opts += " -c #{Bravo.cert}"
 
