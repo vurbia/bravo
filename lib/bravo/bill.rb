@@ -7,7 +7,16 @@ module Bravo
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      @client         = Savon::Client.new(Bravo.service_url)
+      @client         = Savon::Client.new do |wsdl, http|
+                          wsdl.document = Bravo.service_url
+                          http.auth.ssl.cert_key_file = Bravo.pkey
+                          http.auth.ssl.cert_file = Bravo.cert
+                          http.auth.ssl.verify_mode = :fail_if_no_peer_cert
+                          http.read_timeout = 90
+                          http.open_timeout = 90
+                          http.headers = { "Accept-Encoding" => "gzip, deflate", "Connection" => "Keep-Alive" }
+                        end
+
       @body           = {"Auth" => Bravo.auth_hash}
       @net            = attrs[:net] || 0
       self.documento  = attrs[:documento] || Bravo.default_documento
@@ -23,7 +32,7 @@ module Bravo
 
     def exchange_rate
       return 1 if moneda == :peso
-      response = client.fe_param_get_cotizacion do |soap|
+      response = client.request :fe_param_get_cotizacion do
         soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
         soap.body = body.merge!({"MonId" => Bravo::MONEDAS[moneda][:codigo]})
       end
@@ -41,7 +50,7 @@ module Bravo
 
     def authorize
       setup_bill
-      response = client.fecae_solicitar do |soap|
+      response = client.request :fecae_solicitar do |soap|
         soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
         soap.body = body
       end
@@ -89,9 +98,9 @@ module Bravo
     end
 
     def next_bill_number
-      resp = client.fe_comp_ultimo_autorizado do |s|
-        s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type}
+      resp = client.request :fe_comp_ultimo_autorizado do
+        soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+        soap.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type}
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
