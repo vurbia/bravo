@@ -7,6 +7,11 @@ GEM
     crack (0.1.8)
     diff-lcs (1.1.2)
     git (1.2.5)
+    gyoku (0.3.1)
+      builder (>= 2.1.2)
+    httpi (0.9.0)
+      ntlm-http (>= 0.1.1)
+      rack
     jeweler (1.5.2)
       bundler (~> 1.0.0)
       git (>= 1.2.5)
@@ -14,6 +19,8 @@ GEM
     linecache (0.43)
     linecache19 (0.5.11)
       ruby_core_source (>= 0.1.4)
+    ntlm-http (0.1.1)
+    rack (1.2.2)
     rake (0.8.7)
     rcov (0.9.9)
     rspec (2.4.0)
@@ -39,9 +46,11 @@ GEM
       ruby-debug-base19 (>= 0.11.19)
     ruby_core_source (0.1.4)
       archive-tar-minitar (>= 0.5.2)
-    savon (0.7.9)
+    savon (0.8.6)
       builder (>= 2.1.2)
-      crack (>= 0.1.4)
+      crack (~> 0.1.8)
+      gyoku (>= 0.3.0)
+      httpi (>= 0.7.8)
 
 PLATFORMS
   ruby
@@ -54,4 +63,4 @@ DEPENDENCIES
   ruby-debug
   ruby-debug-base19 (= 0.11.24)
   ruby-debug19 (= 0.11.6)
-  savon (~> 0.7.8)
+  savon

@@ -1,5 +1,5 @@
 source "http://rubygems.org"
-gem "savon", "~> 0.7.8"
+gem "savon"
 
 group :development do
   platforms :ruby_18 do
