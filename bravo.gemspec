@@ -21,4 +21,5 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency(%q<savon>, ["~> 0.7.8"])
   gem.add_development_dependency(%q<debugger>, ["~> 1.3.0"])
   gem.add_development_dependency(%q<rspec>, ["~> 2.12.0"])
+  gem.add_development_dependency(%q<rake>, ["~> 10.0.3"])
 end
