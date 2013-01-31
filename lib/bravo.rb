@@ -8,6 +8,7 @@ require "bravo/core_ext/string"
 module Bravo
 
   class NullOrInvalidAttribute < StandardError; end
+  class MissingCertificate < StandardError; end
 
   autoload :Authorizer,   "bravo/authorizer"
   autoload :AuthData,     "bravo/auth_data"
