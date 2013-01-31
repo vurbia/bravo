@@ -1,4 +1,6 @@
-h1. Bravo: la gema de facturaci&oacute;n electr&oacute;nica argentina
+h1. Bravo "!https://travis-ci.org/leanucci/bravo.png!":https://travis-ci.org/leanucci/bravo
+
+bq. la gema de facturaci&oacute;n electr&oacute;nica argentina
 
 "-Bravo-":http://images.coveralia.com/audio/b/Bravo-Desierto_Sin_Amor-Frontal.jpg Bravo permite la obtenci&oacute;n del "-C.A.E.-":http://www.muevamueva.com/masmusica/latina/cae/images/fotos.5.gif C.A.E. (C&oacute;digo de Autorizaci&oacute;n Electr&oacute;nico) por medio del Web Service de Facturaci&oacute;n Electr&oacute;nica provisto por la AFIP.
 
