@@ -44,18 +44,6 @@ describe "Bill" do
     end
   end
 
-  describe "#exchange_rate" do
-    it "fetches non Peso currency's exchange rate" do
-      bill.moneda = :dolar
-      bill.exchange_rate.to_i.should be > 0
-    end
-
-    it "returns 1 for Peso currency" do
-      bill.moneda = :peso
-      bill.exchange_rate.should == 1
-    end
-  end
-
   describe "#iva_sum and #total" do
     it "calculate the IVA array values" do
       bill.iva_cond = :responsable_inscripto
