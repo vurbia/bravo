@@ -3,6 +3,7 @@ PATH
   specs:
     bravo (0.3.7)
       savon (~> 0.7.8)
+      thor (~> 0.16.0)
 
 GEM
   remote: http://rubygems.org/
@@ -30,6 +31,7 @@ GEM
     savon (0.7.9)
       builder (>= 2.1.2)
       crack (>= 0.1.4)
+    thor (0.16.0)
 
 PLATFORMS
   ruby
