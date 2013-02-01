@@ -53,7 +53,7 @@ module Bravo
                         "CbteFch"     => today,
                         "ImpTotConc"  => 0.00,
                         "MonId"       => Bravo::MONEDAS[moneda][:codigo],
-                        "MonCotiz"    => exchange_rate,
+                        "MonCotiz"    => 1,
                         "ImpOpEx"     => 0.00,
                         "ImpTrib"     => 0.00,
                         "Iva"         => {
