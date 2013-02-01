@@ -16,19 +16,21 @@ o
 en tu `Gemfile`
 
 
-## Configuraci&oacute;n
+## Comenzar a usar Bravo
 
-Los servicios de AFIP requieren la utilizaci&oacute;n del Web Service de Autorizaci&oacute;n y Autenticaci&oacute;n [wsaa readme](http://www.afip.gov.ar/ws/WSAA/README.txt)
+Para esto hace falta generar el CSR (Certificate Signature Request).
 
-Luego de cumplidos los pasos indicados en el readme, basta con configurar Bravo con la ruta a los archivos:
+## Uso
 
-	Bravo.pkey = "spec/fixtures/pkey"
- 	Bravo.cert = "spec/fixtures/cert.crt"
+Los servicios de AFIP requieren la utilizaci&oacute;n del Web Service de Autorizaci&oacute;n y Autenticaci&oacute;n [(más info)](http://www.afip.gov.ar/ws/WSAA/README.txt)
 
+Luego de cumplidos los pasos indicados en el readme, basta con configurar Bravo con la ruta a los archivos. En tu aplicación:
 
-y exportar la variable CUIT con el n&uacute;mero de cuit usado para obtener los certificados:
+	require 'bravo'
+	Bravo.pkey = path_al_pkey
+ 	Bravo.cert = path_al_cert
+ 	Bravo.cuit = 20881234569
 
-	export CUIT=_numerodecuit_
 
 Bravo acepta m&aacute;s opciones, para m&aacute;s detalles ver el archivo [spec/spec_helper.rb](https://github.com/vurbia/Bravo/blob/master/spec/spec_helper.rb)
 
