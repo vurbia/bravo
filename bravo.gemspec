@@ -8,7 +8,7 @@ Gem::Specification.new do |gem|
   gem.version       = Bravo::VERSION
   gem.authors       = ["Leandro Marcucci"]
   gem.email         = ["leanucci@gmail.com"]
-  gem.description   = %q{Adaptador para el Web Service de Facturacion Electronica de AFIP}
+  gem.description   = %q{Adaptador para el Web Service de Facturacion Electrónica de AFIP}
   gem.summary       = %q{Adaptador WSFE}
   gem.homepage      = "http://github.com/leanucci/bravo"
   gem.date          = %q(2011-03-14)
