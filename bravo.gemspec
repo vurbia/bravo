@@ -16,13 +16,10 @@ Gem::Specification.new do |gem|
   gem.files         = `git ls-files`.split($/)
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
-  gem.require_paths = ["lib"]
+  gem.require_paths = ["lib", "bin"]
 
   gem.add_runtime_dependency(%q<savon>, ["~> 0.7.8"])
   gem.add_runtime_dependency(%q<thor>, ["~> 0.16.0"])
-  gem.add_development_dependency(%q<debugger>, ["~> 1.3.0"])
   gem.add_development_dependency(%q<rspec>, ["~> 2.12.0"])
   gem.add_development_dependency(%q<rake>, ["~> 10.0.3"])
-  gem.add_development_dependency(%q<guard-rspec>, ["~> 2.4.0"])
-  gem.add_development_dependency(%q<rb-fsevent>, ["~> 0.9.1"])
 end

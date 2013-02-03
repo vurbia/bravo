@@ -2,6 +2,12 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'bravo'
 require 'rspec'
 
+begin
+  require 'debugger'
+  puts 'ruby-debug loaded'
+rescue LoadError
+end
+
 class SpecHelper
   include Savon::Logger
 end
