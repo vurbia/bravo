@@ -30,3 +30,4 @@ fixtures/*
 *.gem
 
 .ruby-version
+Gemfile.lock
