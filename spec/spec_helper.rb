@@ -4,7 +4,6 @@ require 'rspec'
 
 begin
   require 'debugger'
-  puts 'ruby-debug loaded'
 rescue LoadError
 end
 
@@ -28,8 +27,10 @@ Bravo.default_documento = "CUIT"
 Bravo.default_moneda    = :peso
 Bravo.own_iva_cond      = :responsable_inscripto
 Bravo.verbose           = "true"
+Bravo.openssl_bin       = "/usr/local/Cellar/openssl/1.0.1c/bin/openssl"
+Bravo.wsaa_url          = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
 
-
+# TODO: refactor into actual validations
 unless Bravo.cuit
   raise(Bravo::NullOrInvalidAttribute.new, "Please set CUIT env variable.")
 end
