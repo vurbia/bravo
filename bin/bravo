@@ -4,17 +4,16 @@
 require 'rubygems'
 require 'thor'
 
-class Setup < Thor
-  desc "csr", "Crea el Certificate Signature Request"
+class Bravo < Thor
 
+  desc "gencsr", "Crea el Certificate Signature Request"
   method_option :bin,  type: :string, required: true, desc: "El path completo al binario de openssl"
   method_option :pkey, type: :string, desc: "Path a una clave privada preexistente. Si se omite, se crea una clave en --out"
   method_option :sn,   type: :string, required: true, desc: "Nombre del servidor. Sin uso práctico, es requerido por AFIP"
   method_option :cn,   type: :string, required: true, desc: "Nombre de la compañía. Sin uso práctico, es requerido por AFIP"
   method_option :cuit, type: :numeric, required: true, desc: "Número de CUIT sin guiones. Ejemplo: 20876543217"
   method_option :out,  type: :string, default: "bravo-certs", desc: "Directorio de destino para los archivos creados. Si se omite, se crea el directorio bravo-certs en pwd"
-
-  def csr
+  def gencsr
     bin   = options[:bin]
     sn    = options[:sn]
     cn    = options[:cn]
@@ -26,7 +25,6 @@ class Setup < Thor
     out_path = "#{Dir.pwd}/#{out}/"
 
     pkey  = options[:pkey] || create_pkey(bin, out_path)
-
 
     say("Creando CSR en #{out_path} con CUIT=#{cuit}, o=#{sn} y cn=#{cn}", :cyan)
 
@@ -47,4 +45,4 @@ class Setup < Thor
   end
 end
 
-Setup.start
+Bravo.start
