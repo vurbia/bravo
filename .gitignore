@@ -28,6 +28,7 @@ log/*.log
 fixtures/
 fixtures/*
 *.gem
-
+tmp/
+bin/bravo-certs/
 .ruby-version
 Gemfile.lock
