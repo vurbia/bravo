@@ -17,7 +17,7 @@ module Bravo
         opts += " -c #{Bravo.cert}"
 
         unless File.exists?(todays_datafile)
-          %x(#{File.dirname(__FILE__)}/../../wsaa-client.sh #{opts})
+          Bravo::Wsaa.login
         end
 
         @data = YAML.load_file(todays_datafile).each do |k, v|
