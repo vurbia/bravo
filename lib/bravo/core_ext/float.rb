@@ -1,7 +1,13 @@
+# Float monkeypatching.
+#
 class Float
+  # Should be removed.
+  #
   def round_with_precision(precision = nil)
     precision.nil? ? round : (self * (10 ** precision)).round / (10 ** precision).to_f
   end
+  # Should be removed.
+  #
   def round_up_with_precision(precision = nil)
     precision.nil? ? round : ((self * (10 ** precision)).round + 1) / (10 ** precision).to_f
   end

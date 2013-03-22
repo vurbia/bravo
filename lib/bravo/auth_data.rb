@@ -1,7 +1,13 @@
 module Bravo
+  # This class handles authorization data
+  #
   class AuthData
 
     class << self
+      # Fetches WSAA Authorization Data to build the datafile for the day.
+      # It requires the private key file and the certificate to exist and
+      # to be configured as Bravo.pkey and Bravo.cert
+      #
       def fetch
         unless File.exists?(Bravo.pkey)
           raise "Archivo de llave privada no encontrado en #{ Bravo.pkey }"

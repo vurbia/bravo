@@ -1,6 +1,13 @@
 module Bravo
+  # The main class in Bravo. Handles WSFE method interactions.
+  # Subsequent implementations will be added here (maybe).
+  #
   class Bill
-    attr_reader :client, :base_imp, :total
+    # Returns the Savon::Client instance in charge of the interactions with WSFE API.
+    # (built on init)
+    #
+    attr_reader :client
+
     attr_accessor :net, :doc_num, :iva_cond, :documento, :concepto, :moneda,
                   :due_date, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
                   :body, :response
@@ -16,20 +23,37 @@ module Bravo
       self.concepto   = attrs[:concepto]  || Bravo.default_concepto
     end
 
+    # Searches the corresponding invoice type according to the combination of
+    # the seller's IVA condition and the buyer's IVA condition
+    # @return [String] the document type string
+    #
     def cbte_type
       Bravo::BILL_TYPE[Bravo.own_iva_cond][iva_cond] ||
         raise(NullOrInvalidAttribute.new, "Please choose a valid document type.")
     end
 
+    # Calculates the total field for the invoice by adding
+    # net and iva_sum.
+    # @return [Float] the sum of both fields, or 0 if the net is 0.
+    #
     def total
       @total = net.zero? ? 0 : net + iva_sum
     end
 
+    # Calculates the corresponding iva sum.
+    # This is performed by multiplying the net by the tax value
+    # @return [Float] the iva sum
+    #
+    # TODO: fix this
+    #
     def iva_sum
       @iva_sum = net * Bravo::ALIC_IVA[aliciva_id][1]
       @iva_sum.round_up_with_precision(2)
     end
 
+    # Files the authorization request to AFIP
+    # @return [Boolean] wether the request succeeded or not
+    #
     def authorize
       setup_bill
       response = client.fecae_solicitar do |soap|
@@ -41,6 +65,9 @@ module Bravo
       self.authorized?
     end
 
+    # Sets up the request body for the authorisation
+    # @return [Hash] returns the request body as a hash
+    #
     def setup_bill
       today = Time.new.strftime('%Y%m%d')
 
@@ -79,6 +106,9 @@ module Bravo
       body.merge!(fecaereq)
     end
 
+    # Fetches the number for the next bill to be issued
+    # @return [Integer] the number for the next bill
+    #
     def next_bill_number
       resp = client.fe_comp_ultimo_autorizado do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
@@ -88,6 +118,9 @@ module Bravo
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
     end
 
+    # Returns the result of the authorization operation
+    # @return [Boolean] the response result
+    #
     def authorized?
       !response.nil? && response.header_result == "A" && response.detail_result == "A"
     end
@@ -95,11 +128,18 @@ module Bravo
     private
 
     class << self
-      def header(cbte_type)#todo sacado de la factura
+      # Sets the header hash for the request
+      # @return [Hash]
+      #
+      def header(cbte_type)
+        # todo sacado de la factura
         { "CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => Bravo.sale_point }
       end
     end
 
+    # Response parser. Only works for the authorize method
+    # @return [Struct] a struct with key-value pairs with the response values
+    #
     def setup_response(response)
       # TODO: turn this into an all-purpose Response class
 

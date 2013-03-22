@@ -1,3 +1,5 @@
 module Bravo
-  VERSION = "0.3.10"
+  # Gem version
+  #
+  VERSION = "0.4.0"
 end

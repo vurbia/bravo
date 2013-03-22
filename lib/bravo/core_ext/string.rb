@@ -1,5 +1,8 @@
-# Stolen from activesupport/lib/active_support/inflector/methods.rb, line 48
+# Added to avoid requiring ActiveSupport as dependency
+#
 class String
+  # Stolen from activesupport/lib/active_support/inflector/methods.rb, line 48
+  #
   def underscore
     word = self.to_s.dup
     word.gsub!(/::/, '/')

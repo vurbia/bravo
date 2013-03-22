@@ -8,7 +8,12 @@ require "bravo/core_ext/string"
 
 module Bravo
 
+  # Exception Class for missing or invalid attributes
+  #
   class NullOrInvalidAttribute < StandardError; end
+
+  # Exception Clas for missing or invalid certifficate
+  #
   class MissingCertificate < StandardError; end
 
   autoload :Authorizer,   "bravo/authorizer"
@@ -23,6 +28,9 @@ module Bravo
                 :cert, :default_concepto, :default_moneda, :own_iva_cond,
                 :verbose, :openssl_bin, :wsaa_url
 
+  # Returns the authorization hash, containing the Token, Signature and Cuit
+  # @return [Hash]
+  #
   def auth_hash
     { "Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit }
   end
