@@ -4,17 +4,17 @@ module Bravo
     class << self
       def fetch
         unless File.exists?(Bravo.pkey)
-          raise "Archivo de llave privada no encontrado en #{Bravo.pkey}"
+          raise "Archivo de llave privada no encontrado en #{ Bravo.pkey }"
         end
 
         unless File.exists?(Bravo.cert)
-          raise "Archivo certificado no encontrado en #{Bravo.cert}"
+          raise "Archivo certificado no encontrado en #{ Bravo.cert }"
         end
 
-        todays_datafile = "/tmp/bravo_#{Time.new.strftime('%d_%m_%Y')}.yml"
+        todays_datafile = "/tmp/bravo_#{ Time.new.strftime('%d_%m_%Y') }.yml"
         opts = "-u https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
-        opts += " -k #{Bravo.pkey}"
-        opts += " -c #{Bravo.cert}"
+        opts += " -k #{ Bravo.pkey }"
+        opts += " -c #{ Bravo.cert }"
 
         unless File.exists?(todays_datafile)
           Bravo::Wsaa.login

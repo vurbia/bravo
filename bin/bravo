@@ -22,16 +22,16 @@ class Bravo < Thor
 
     Dir.mkdir(out) unless File.exists?(out)
 
-    out_path = "#{Dir.pwd}/#{out}/"
+    out_path = "#{ Dir.pwd }/#{ out }/"
 
     pkey  = options[:pkey] || create_pkey(bin, out_path)
 
-    say("Creando CSR en #{out_path} con CUIT=#{cuit}, o=#{sn} y cn=#{cn}", :cyan)
+    say("Creando CSR en #{ out_path } con CUIT=#{ cuit }, o=#{ sn } y cn=#{ cn }", :cyan)
 
     `#{bin} req -new \
-                -key #{pkey} \
-                -subj "/C=AR/O=#{sn}/CN=#{cn}/serialNumber=CUIT #{cuit}"\
-                -out #{out_path}pedido-#{cuit}`
+                -key #{ pkey } \
+                -subj "/C=AR/O=#{ sn }/CN=#{ cn }/serialNumber=CUIT #{ cuit }"\
+                -out #{ out_path }pedido-#{ cuit }`
 
     say("Hecho!", :green)
   end
@@ -39,9 +39,9 @@ class Bravo < Thor
   protected
   def create_pkey(bin,out_path)
     say("Creando pkey", :cyan)
-    `#{bin} genrsa -out #{out_path}pkey 1024`
+    `#{ bin } genrsa -out #{ out_path }pkey 1024`
     say("Hecho!\n\n", :green)
-    "#{out_path}pkey"
+    "#{ out_path }pkey"
   end
 end
 

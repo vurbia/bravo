@@ -5,6 +5,7 @@ require "savon"
 require "bravo/core_ext/float"
 require "bravo/core_ext/hash"
 require "bravo/core_ext/string"
+
 module Bravo
 
   class NullOrInvalidAttribute < StandardError; end
@@ -17,12 +18,13 @@ module Bravo
   autoload :Wsaa,         "bravo/wsaa"
 
   extend self
+
   attr_accessor :cuit, :sale_point, :service_url, :default_documento, :pkey,
                 :cert, :default_concepto, :default_moneda, :own_iva_cond,
-                :verbose, :openssl_bin
+                :verbose, :openssl_bin, :wsaa_url
 
   def auth_hash
-    {"Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit}
+    { "Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit }
   end
 
   Savon::Request.log = false unless (Bravo.verbose == "true") || (ENV["VERBOSE"] == true)

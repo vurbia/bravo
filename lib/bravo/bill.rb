@@ -8,7 +8,7 @@ module Bravo
     def initialize(attrs = {})
       Bravo::AuthData.fetch
       @client         = Savon::Client.new(Bravo.service_url)
-      @body           = {"Auth" => Bravo.auth_hash}
+      @body           = { "Auth" => Bravo.auth_hash }
       @net            = attrs[:net] || 0
       self.documento  = attrs[:documento] || Bravo.default_documento
       self.moneda     = attrs[:moneda]    || Bravo.default_moneda
@@ -44,7 +44,7 @@ module Bravo
     def setup_bill
       today = Time.new.strftime('%Y%m%d')
 
-      fecaereq = {"FeCAEReq" => {
+      fecaereq = { "FeCAEReq" => {
                     "FeCabReq" => Bravo::Bill.header(cbte_type),
                     "FeDetReq" => {
                       "FECAEDetRequest" => {
@@ -60,7 +60,7 @@ module Bravo
                           "AlicIva" => {
                             "Id" => "5",
                             "BaseImp" => net,
-                            "Importe" => iva_sum}}}}}}
+                            "Importe" => iva_sum } } } } } }
 
       detail = fecaereq["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]
 
@@ -71,9 +71,9 @@ module Bravo
       detail["CbteDesde"] = detail["CbteHasta"] = next_bill_number
 
       unless concepto == 0
-        detail.merge!({"FchServDesde" => fch_serv_desde || today,
-                      "FchServHasta"  => fch_serv_hasta || today,
-                      "FchVtoPago"    => due_date       || today})
+        detail.merge!({ "FchServDesde"  => fch_serv_desde || today,
+                        "FchServHasta"  => fch_serv_hasta || today,
+                        "FchVtoPago"    => due_date       || today })
       end
 
       body.merge!(fecaereq)
@@ -82,7 +82,7 @@ module Bravo
     def next_bill_number
       resp = client.fe_comp_ultimo_autorizado do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = {"Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type}
+        s.body = { "Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type }
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
@@ -96,7 +96,7 @@ module Bravo
 
     class << self
       def header(cbte_type)#todo sacado de la factura
-        {"CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => Bravo.sale_point}
+        { "CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => Bravo.sale_point }
       end
     end
 
@@ -115,18 +115,18 @@ module Bravo
 
       request_detail.merge!(iva)
 
-      response_hash = {:header_result => response_header.delete(:resultado),
-                       :authorized_on => response_header.delete(:fch_proceso),
-                       :detail_result => response_detail.delete(:resultado),
-                       :cae_due_date  => response_detail.delete(:cae_fch_vto),
-                       :cae           => response_detail.delete(:cae),
-                       :iva_id        => request_detail.delete(:id),
-                       :iva_importe   => request_detail.delete(:importe),
-                       :moneda        => request_detail.delete(:mon_id),
-                       :cotizacion    => request_detail.delete(:mon_cotiz),
-                       :iva_base_imp  => request_detail.delete(:base_imp),
-                       :doc_num       => request_detail.delete(:doc_nro)
-                       }.merge!(request_header).merge!(request_detail)
+      response_hash = { :header_result => response_header.delete(:resultado),
+                        :authorized_on => response_header.delete(:fch_proceso),
+                        :detail_result => response_detail.delete(:resultado),
+                        :cae_due_date  => response_detail.delete(:cae_fch_vto),
+                        :cae           => response_detail.delete(:cae),
+                        :iva_id        => request_detail.delete(:id),
+                        :iva_importe   => request_detail.delete(:importe),
+                        :moneda        => request_detail.delete(:mon_id),
+                        :cotizacion    => request_detail.delete(:mon_cotiz),
+                        :iva_base_imp  => request_detail.delete(:base_imp),
+                        :doc_num       => request_detail.delete(:doc_nro)
+                        }.merge!(request_header).merge!(request_detail)
 
       keys, values  = response_hash.to_a.transpose
       self.response = (defined?(Struct::Response) ? Struct::Response : Struct.new("Response", *keys)).new(*values)

@@ -40,7 +40,7 @@ describe "Bill" do
     it "raises error on nil iva cond" do
       bill.iva_cond = 12
 
-      expect{bill.cbte_type}.to raise_error(Bravo::NullOrInvalidAttribute)
+      expect { bill.cbte_type }.to raise_error(Bravo::NullOrInvalidAttribute)
     end
   end
 

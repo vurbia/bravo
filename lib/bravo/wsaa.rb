@@ -18,9 +18,9 @@ module Bravo
 <?xml version="1.0" encoding="UTF-8"?>
 <loginTicketRequest version="1.0">
   <header>
-    <uniqueId>#{id}</uniqueId>
-    <generationTime>#{from}</generationTime>
-    <expirationTime>#{to}</expirationTime>
+    <uniqueId>#{ id }</uniqueId>
+    <generationTime>#{ from }</generationTime>
+    <expirationTime>#{ to }</expirationTime>
   </header>
   <service>wsfe</service>
 </loginTicketRequest>
@@ -29,10 +29,10 @@ EOF
     end
 
     def self.build_cms(tra)
-      cms = `echo '#{tra}' |
-        #{Bravo.openssl_bin} cms -sign -in /dev/stdin -signer #{Bravo.cert} -inkey #{Bravo.pkey} -nodetach \
+      cms = `echo '#{ tra }' |
+        #{ Bravo.openssl_bin } cms -sign -in /dev/stdin -signer #{ Bravo.cert } -inkey #{ Bravo.pkey } -nodetach \
                 -outform der |
-        #{Bravo.openssl_bin} base64 -e`
+        #{ Bravo.openssl_bin } base64 -e`
       return cms
     end
 
@@ -43,7 +43,7 @@ EOF
   <SOAP-ENV:Body>
     <ns1:loginCms>
       <ns1:in0>
-#{cms}
+#{ cms }
       </ns1:in0>
     </ns1:loginCms>
   </SOAP-ENV:Body>
@@ -53,8 +53,8 @@ XML
     end
 
     def self.call_wsaa(req)
-      response = `echo '#{req}' |
-        curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- #{Bravo.wsaa_url}`
+      response = `echo '#{ req }' |
+        curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- #{ Bravo.wsaa_url }`
 
       response = CGI::unescapeHTML(response)
       token = response.scan(/\<token\>(.+)\<\/token\>/).first.first
@@ -67,7 +67,7 @@ XML
 token: #{certs[0]}
 sign: #{certs[1]}
 YML
-    `echo '#{yml}' > /tmp/bravo_#{Time.new.strftime('%d_%m_%Y')}.yml`
+    `echo '#{ yml }' > /tmp/bravo_#{ Time.new.strftime('%d_%m_%Y') }.yml`
     end
 
   end
