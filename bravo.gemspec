@@ -21,5 +21,6 @@ Gem::Specification.new do |gem|
   gem.add_runtime_dependency(%q<savon>, ["~> 0.7.8"])
   gem.add_runtime_dependency(%q<thor>, ["~> 0.16.0"])
   gem.add_development_dependency(%q<rspec>, ["~> 2.12.0"])
+  gem.add_development_dependency(%q<rspec-mocks>, ["~> 2.12.1"])
   gem.add_development_dependency(%q<rake>, ["~> 10.0.3"])
 end

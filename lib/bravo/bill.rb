@@ -14,9 +14,9 @@ module Bravo
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      @client         = Savon::Client.new(Bravo.service_url)
-      @body           = { "Auth" => Bravo.auth_hash }
-      @net            = attrs[:net] || 0
+      @client         = Savon::Client.new(Bravo::AuthData.wsfe_url)
+      @body           = { "Auth" => Bravo::AuthData.auth_hash }
+      @net            = attrs[:net]       || 0
       self.documento  = attrs[:documento] || Bravo.default_documento
       self.moneda     = attrs[:moneda]    || Bravo.default_moneda
       self.iva_cond   = attrs[:iva_cond]
@@ -112,7 +112,7 @@ module Bravo
     def next_bill_number
       resp = client.fe_comp_ultimo_autorizado do |s|
         s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = { "Auth" => Bravo.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type }
+        s.body = { "Auth" => Bravo::AuthData.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type }
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1

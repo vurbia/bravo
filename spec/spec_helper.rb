@@ -21,14 +21,13 @@ Bravo.pkey              = "spec/fixtures/certs/pkey"
 Bravo.cert              = "spec/fixtures/certs/cert.crt"
 Bravo.cuit              = ENV["CUIT"] || "20287740027"
 Bravo.sale_point        = ENV["SALE"] || "0002"
-Bravo.service_url       = "http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
 Bravo.default_concepto  = "Productos y Servicios"
 Bravo.default_documento = "CUIT"
 Bravo.default_moneda    = :peso
 Bravo.own_iva_cond      = :responsable_inscripto
 Bravo.verbose           = "true"
 Bravo.openssl_bin       = "/usr/local/Cellar/openssl/1.0.1c/bin/openssl"
-Bravo.wsaa_url          = "https://wsaahomo.afip.gov.ar/ws/services/LoginCms"
+Bravo::AuthData.environment         = :test
 
 # TODO: refactor into actual validations
 unless Bravo.cuit

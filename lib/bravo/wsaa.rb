@@ -12,17 +12,19 @@ module Bravo
       cms   = build_cms(tra)
       req   = build_request(cms)
       auth  = call_wsaa(req)
+
       write_yaml(auth)
     end
 
     protected
-    # Builds the xml for the Ticket Request
+    # Builds the xml for the "Ticket de Requerimiento de Acceso"
     # @return [String] containing the request body
     #
     def self.build_tra
-      from = Time.now.strftime("%FT%T%:z")
-      to   = (Time.now + (24*60*60)).strftime("%FT%T%:z")
-      id   = Time.now.strftime("%s")
+      now = Time.now
+      from = now.strftime("%FT%T%:z")
+      to   = ((now - 120) + (24*60*60)).strftime("%FT%T%:z") # make sure ti will last for 24hs - 2 mins
+      id   = now.strftime("%s")
       tra  = <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <loginTicketRequest version="1.0">
@@ -72,7 +74,7 @@ XML
     #
     def self.call_wsaa(req)
       response = `echo '#{ req }' |
-        curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- #{ Bravo.wsaa_url }`
+        curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- #{ Bravo::AuthData.wsaa_url }`
 
       response = CGI::unescapeHTML(response)
       token = response.scan(/\<token\>(.+)\<\/token\>/).first.first
@@ -87,7 +89,7 @@ XML
 token: #{certs[0]}
 sign: #{certs[1]}
 YML
-    `echo '#{ yml }' > /tmp/bravo_#{ Time.new.strftime('%d_%m_%Y') }.yml`
+    `echo '#{ yml }' > /tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%d_%m_%Y') }.yml`
     end
 
   end

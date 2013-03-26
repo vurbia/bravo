@@ -24,16 +24,9 @@ module Bravo
 
   extend self
 
-  attr_accessor :cuit, :sale_point, :service_url, :default_documento, :pkey,
-                :cert, :default_concepto, :default_moneda, :own_iva_cond,
-                :verbose, :openssl_bin, :wsaa_url
-
-  # Returns the authorization hash, containing the Token, Signature and Cuit
-  # @return [Hash]
-  #
-  def auth_hash
-    { "Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit }
-  end
+  attr_accessor :cuit, :sale_point, :default_documento, :pkey, :cert,
+                :default_concepto, :default_moneda, :own_iva_cond,
+                :verbose, :openssl_bin
 
   Savon::Request.log = false unless (Bravo.verbose == "true") || (ENV["VERBOSE"] == true)
 end

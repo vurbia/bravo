@@ -1,5 +1,6 @@
 # encoding: utf-8
 # Here we define Hashes
+#
 module Bravo
   # This constant contains the invoice types mappings between codes and names
   # used by WSFE.
@@ -70,4 +71,13 @@ module Bravo
       :consumidor_final         => "06",
       :exento                   => "06",
       :responsable_monotributo  => "06" } }
+
+  # This hash keeps the set of urls for wsaa and wsfe for production and testing envs
+  #
+  URLS = {
+    :test => { :wsaa => "https://wsaahomo.afip.gov.ar/ws/services/LoginCms",
+               :wsfe => "http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL" },
+
+    :production => { :wsaa => "https://wsaa.afip.gov.ar/ws/services/LoginCms",
+                     :wsfe => "https://servicios1.afip.gov.ar/wsfev1/service.asmx" } }
 end
