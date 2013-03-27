@@ -14,7 +14,7 @@ module Bravo
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      @client         = Savon::Client.new(Bravo::AuthData.wsfe_url)
+      @client         = Savon.client(wsdl: Bravo::AuthData.wsfe_url, log: false)
       @body           = { "Auth" => Bravo::AuthData.auth_hash }
       @net            = attrs[:net]       || 0
       self.documento  = attrs[:documento] || Bravo.default_documento
@@ -56,9 +56,9 @@ module Bravo
     #
     def authorize
       setup_bill
-      response = client.fecae_solicitar do |soap|
-        soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        soap.body = body
+      response = client.call(:fecae_solicitar) do |soap|
+        # soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+        soap.message body
       end
 
       setup_response(response.to_hash)
@@ -110,9 +110,9 @@ module Bravo
     # @return [Integer] the number for the next bill
     #
     def next_bill_number
-      resp = client.fe_comp_ultimo_autorizado do |s|
-        s.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        s.body = { "Auth" => Bravo::AuthData.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type }
+      resp = client.call(:fe_comp_ultimo_autorizado) do |soap|
+        # soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+        soap.message "Auth" => Bravo::AuthData.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1

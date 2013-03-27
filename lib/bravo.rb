@@ -28,5 +28,4 @@ module Bravo
                 :default_concepto, :default_moneda, :own_iva_cond,
                 :verbose, :openssl_bin
 
-  Savon::Request.log = false unless (Bravo.verbose == "true") || (ENV["VERBOSE"] == true)
 end
