@@ -74,7 +74,7 @@ XML
     #
     def self.call_wsaa(req)
       response = `echo '#{ req }' |
-        curl -k -H 'Content-Type: application/soap+xml; action=""' -d @- #{ Bravo::AuthData.wsaa_url }`
+        curl -k -s -H 'Content-Type: application/soap+xml; action=""' -d @- #{ Bravo::AuthData.wsaa_url }`
 
       response = CGI::unescapeHTML(response)
       token = response.scan(/\<token\>(.+)\<\/token\>/).first.first
