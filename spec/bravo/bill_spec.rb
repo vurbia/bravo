@@ -4,7 +4,7 @@ describe "Bill" do
   let(:bill) { @bill = Bravo::Bill.new }
 
   describe ".header" do
-    it "sets up a header hash" do
+    it "sets up the header hash" do
       @header = Bravo::Bill.header(0)
       @header.size.should == 3
       ["CantReg", "CbteTipo", "PtoVta"].each do |key|
@@ -22,7 +22,7 @@ describe "Bill" do
       end
 
       bill.documento.should == Bravo.default_documento
-      bill.moneda.should == Bravo.default_moneda
+      bill.moneda.should    == Bravo.default_moneda
     end
   end
 
@@ -46,10 +46,10 @@ describe "Bill" do
 
   describe "#iva_sum and #total" do
     it "calculate the IVA array values" do
-      bill.iva_cond = :responsable_inscripto
-      bill.moneda = :peso
-      bill.net = 100.89
-      bill.aliciva_id = 2
+      bill.iva_cond     = :responsable_inscripto
+      bill.moneda       = :peso
+      bill.net          = 100.89
+      bill.aliciva_id   = 2
 
       bill.iva_sum.should be_within(0.05).of(21.18)
       bill.total.should be_within(0.05).of(122.07)
@@ -58,11 +58,11 @@ describe "Bill" do
 
   describe "#setup_bill" do
     before do
-      bill.net = 100
+      bill.net        = 100
       bill.aliciva_id = 2
-      bill.doc_num = "30710151543"
-      bill.iva_cond = :responsable_inscripto
-      bill.concepto = "Servicios"
+      bill.doc_num    = "30710151543"
+      bill.iva_cond   = :responsable_inscripto
+      bill.concepto   = "Servicios"
     end
 
     it "uses today dates when due and service dates are ommitted" do
@@ -93,11 +93,11 @@ describe "Bill" do
   describe "#authorize" do
     Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
       it "authorizes a valid bill for #{target_iva_cond.to_s}" do
-        bill.net = 1000000
-        bill.aliciva_id = 2
-        bill.doc_num = "30710151543"
-        bill.iva_cond = target_iva_cond
-        bill.concepto = "Servicios"
+        bill.net          = 10000.00
+        bill.aliciva_id   = 2
+        bill.doc_num      = "30710151543"
+        bill.iva_cond     = target_iva_cond
+        bill.concepto     = "Servicios"
 
         bill.authorized?.should  == false
         bill.authorize.should    == true
