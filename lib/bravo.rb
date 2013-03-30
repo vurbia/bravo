@@ -21,6 +21,7 @@ module Bravo
   autoload :Bill,         "bravo/bill"
   autoload :Constants,    "bravo/constants"
   autoload :Wsaa,         "bravo/wsaa"
+  autoload :Reference,    "bravo/reference"
 
   extend self
 

@@ -10,17 +10,18 @@ module Bravo
 
     attr_accessor :net, :doc_num, :iva_cond, :documento, :concepto, :moneda,
                   :due_date, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
-                  :body, :response
+                  :body, :response, :invoice_type
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      @client         = Savon.client(wsdl: Bravo::AuthData.wsfe_url, log: false)
-      @body           = { "Auth" => Bravo::AuthData.auth_hash }
-      @net            = attrs[:net]       || 0
-      self.documento  = attrs[:documento] || Bravo.default_documento
-      self.moneda     = attrs[:moneda]    || Bravo.default_moneda
-      self.iva_cond   = attrs[:iva_cond]
-      self.concepto   = attrs[:concepto]  || Bravo.default_concepto
+      @client           = Savon.client(wsdl: Bravo::AuthData.wsfe_url, log: false)
+      @body             = { "Auth" => Bravo::AuthData.auth_hash }
+      self.iva_cond     = attrs[:iva_cond]
+      @net              = attrs[:net]           || 0
+      self.documento    = attrs[:documento]     || Bravo.default_documento
+      self.moneda       = attrs[:moneda]        || Bravo.default_moneda
+      self.concepto     = attrs[:concepto]      || Bravo.default_concepto
+      self.invoice_type = attrs[:invoice_type]  || :invoice
     end
 
     # Searches the corresponding invoice type according to the combination of
@@ -28,8 +29,10 @@ module Bravo
     # @return [String] the document type string
     #
     def cbte_type
-      Bravo::BILL_TYPE[Bravo.own_iva_cond][iva_cond] ||
-        raise(NullOrInvalidAttribute.new, "Please choose a valid document type.")
+      own_iva = Bravo::BILL_TYPE.has_key?(Bravo.own_iva_cond) ? Bravo::BILL_TYPE[Bravo.own_iva_cond] : raise(NullOrInvalidAttribute.new, "Own iva_cond is invalid.")
+      target_iva = own_iva.has_key?(iva_cond) ? own_iva[iva_cond] : raise(NullOrInvalidAttribute.new, "Target iva_cond is invalid.")
+      type = target_iva.has_key?(invoice_type) ? target_iva[invoice_type] : raise(NullOrInvalidAttribute.new, "Selected invoice_type is invalid.")
+
     end
 
     # Calculates the total field for the invoice by adding
@@ -95,7 +98,7 @@ module Bravo
       detail["ImpNeto"]   = net.to_f
       detail["ImpIVA"]    = iva_sum
       detail["ImpTotal"]  = total
-      detail["CbteDesde"] = detail["CbteHasta"] = next_bill_number
+      detail["CbteDesde"] = detail["CbteHasta"] = Bravo::Reference.next_bill_number(cbte_type)
 
       unless concepto == 0
         detail.merge!({ "FchServDesde"  => fch_serv_desde || today,
@@ -104,18 +107,6 @@ module Bravo
       end
 
       body.merge!(fecaereq)
-    end
-
-    # Fetches the number for the next bill to be issued
-    # @return [Integer] the number for the next bill
-    #
-    def next_bill_number
-      resp = client.call(:fe_comp_ultimo_autorizado) do |soap|
-        # soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
-        soap.message "Auth" => Bravo::AuthData.auth_hash, "PtoVta" => Bravo.sale_point, "CbteTipo" => cbte_type
-      end
-
-      resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
     end
 
     # Returns the result of the authorization operation

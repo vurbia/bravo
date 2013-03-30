@@ -59,18 +59,34 @@ module Bravo
   #
   ALIC_IVA = [["03", 0], ["04", 0.105], ["05", 0.21], ["06", 0.27]]
 
+
+
+  # This hash keeps the codes for A document types by operation
+  #
+  BILL_TYPE_A = {
+    :invoice => "01",
+    :debit   => "02",
+    :credit  => "03" }
+
+  # This hash keeps the codes for A document types by operation
+  #
+  BILL_TYPE_B = {
+    :invoice => "06",
+    :debit   => "07",
+    :credit  => "08" }
+
   # This hash keeps the different buyer and invoice type mapping corresponding to
-  # the seller's iva condition.
+  # the seller's iva condition and invoice kind.
   # Usage:
-  #   `BILL_TYPE[seller_iva_cond][buyer_iva_cond]` #=> invoice type as string
-  #   `BILL_TYPE[:responsable_inscripto][:responsable_inscripto]` #=> "01"
+  #   `BILL_TYPE[seller_iva_cond][buyer_iva_cond][invoice_type]` #=> invoice type as string
+  #   `BILL_TYPE[:responsable_inscripto][:responsable_inscripto][:invoice]` #=> "01"
   #
   BILL_TYPE = {
     :responsable_inscripto => {
-      :responsable_inscripto    => "01",
-      :consumidor_final         => "06",
-      :exento                   => "06",
-      :responsable_monotributo  => "06" } }
+      :responsable_inscripto    => BILL_TYPE_A,
+      :consumidor_final         => BILL_TYPE_B,
+      :exento                   => BILL_TYPE_B,
+      :responsable_monotributo  => BILL_TYPE_B } }
 
   # This hash keeps the set of urls for wsaa and wsfe for production and testing envs
   #
