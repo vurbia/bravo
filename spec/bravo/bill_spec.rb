@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe "Bill" do
@@ -27,17 +28,20 @@ describe "Bill" do
   end
 
   describe "#cbte_type" do
+    before { bill.invoice_type = :invoice }
     it "returns the bill type for Responsable Inscripto" do
       bill.iva_cond = :responsable_inscripto
+
       bill.cbte_type.should == "01"
     end
 
     it "returns the bill type for Consumidor Final" do
       bill.iva_cond = :consumidor_final
+
       bill.cbte_type.should == "06"
     end
 
-    it "raises error on nil iva cond" do
+    it "raises error on nil or invalid iva cond" do
       bill.iva_cond = 12
 
       expect { bill.cbte_type }.to raise_error(Bravo::NullOrInvalidAttribute)
@@ -91,22 +95,29 @@ describe "Bill" do
   end
 
   describe "#authorize" do
-    Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
-      it "authorizes a valid bill for #{target_iva_cond.to_s}" do
-        bill.net          = 10000.00
-        bill.aliciva_id   = 2
-        bill.doc_num      = "30710151543"
-        bill.iva_cond     = target_iva_cond
-        bill.concepto     = "Servicios"
+    describe "for facturas" do
+      Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
+        describe "issued to #{ target_iva_cond.to_s }" do
+          Bravo::BILL_TYPE[Bravo.own_iva_cond][target_iva_cond].keys.each do |bill_type|
+            it "authorizes bill type #{ bill_type }" do
+              bill.net          = 10000.00
+              bill.aliciva_id   = 2
+              bill.doc_num      = "30710151543"
+              bill.iva_cond     = target_iva_cond
+              bill.concepto     = "Servicios"
+              bill.invoice_type = bill_type
 
-        bill.authorized?.should  == false
-        bill.authorize.should    == true
-        bill.authorized?.should  == true
+              bill.authorized?.should  == false
+              bill.authorize.should    == true
+              bill.authorized?.should  == true
 
-        response = bill.response
+              response = bill.response
 
-        response.length.should     == 28
-        response.cae.length.should == 14
+              response.length.should     == 28
+              response.cae.length.should == 14
+            end
+          end
+        end
       end
     end
   end
