@@ -1,4 +1,6 @@
 module Bravo
+  # Class in charge of issuing read requests on the api
+  #
   class Reference
     # Fetches the number for the next bill to be issued
     # @return [Integer] the number for the next bill

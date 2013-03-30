@@ -1,3 +1,11 @@
+*Bravo 1.0.0.alpha (March 30, 2013)*
+
+* Updated dependencies
+* Added reference class that will pass any method to the api, without a message
+* Added bravo binary, which handles CSR and pkey generation
+* rdoc
+* Added support for nota de credito and nota de debito
+
 *Bravo 0.3.6 (March 14, 2011) *
 
 * Hash extensions play nice with Rails 2.3 ruby 1.9 [miloops]
