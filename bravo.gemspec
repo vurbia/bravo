@@ -10,7 +10,7 @@ Gem::Specification.new do |gem|
   gem.email         = ["leanucci@gmail.com"]
   gem.description   = %q{Adaptador para el Web Service de Facturacion Electrónica de AFIP}
   gem.summary       = %q{Adaptador WSFE}
-  gem.homepage      = "http://github.com/leanucci/bravo"
+  gem.homepage      = "https://github.com/leanucci/bravo#readme"
   gem.date          = %q(2011-03-14)
 
   gem.files         = `git ls-files`.split($/)
