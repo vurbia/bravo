@@ -69,6 +69,7 @@ describe 'Bill' do
       bill.concepto   = 'Servicios'
     end
 
+    use_vcr_cassette 'setup_bill_ommitted_date'
     it 'uses today dates when due and service dates are ommitted' do
       bill.setup_bill
 
@@ -79,6 +80,7 @@ describe 'Bill' do
       detail['FchVtoPago'].should   == Time.new.strftime('%Y%m%d')
     end
 
+    use_vcr_cassette 'setup_bill_given_date'
     it 'uses given due and service dates' do
       bill.due_date       = Date.new(2011, 12, 10).strftime('%Y%m%d')
       bill.fch_serv_desde = Date.new(2011, 11, 01).strftime('%Y%m%d')
@@ -99,6 +101,7 @@ describe 'Bill' do
       Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
         describe "issued to #{ target_iva_cond.to_s }" do
           Bravo::BILL_TYPE[Bravo.own_iva_cond][target_iva_cond].keys.each do |bill_type|
+            use_vcr_cassette "#{ target_iva_cond.to_s }_and_#{ bill_type }"
             it "authorizes bill type #{ bill_type }" do
               bill.net          = 10000.00
               bill.aliciva_id   = 2
