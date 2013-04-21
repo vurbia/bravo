@@ -25,8 +25,8 @@ tmtags
 .rspec
 log/
 log/*.log
-fixtures/
-fixtures/*
+./fixtures/
+./fixtures/*
 *.gem
 tmp/
 bin/bravo-certs/
