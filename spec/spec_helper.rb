@@ -31,7 +31,7 @@ Bravo.default_documento = 'CUIT'
 Bravo.default_moneda    = :peso
 Bravo.own_iva_cond      = :responsable_inscripto
 Bravo.verbose           = 'true'
-Bravo.openssl_bin       = '/usr/local/Cellar/openssl/1.0.1c/bin/openssl'
+Bravo.openssl_bin       = ENV["TRAVIS"] ? 'openssl' : '/usr/local/Cellar/openssl/1.0.1c/bin/openssl'
 Bravo::AuthData.environment         = :test
 
 # TODO: refactor into actual validations
