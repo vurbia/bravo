@@ -1,10 +1,10 @@
-require "bundler/setup"
-require "bravo/version"
-require "bravo/constants"
-require "savon"
-require "bravo/core_ext/float"
-require "bravo/core_ext/hash"
-require "bravo/core_ext/string"
+require 'bundler/setup'
+require 'bravo/version'
+require 'bravo/constants'
+require 'savon'
+require 'bravo/core_ext/float'
+require 'bravo/core_ext/hash'
+require 'bravo/core_ext/string'
 
 module Bravo
 
@@ -16,12 +16,12 @@ module Bravo
   #
   class MissingCertificate < StandardError; end
 
-  autoload :Authorizer,   "bravo/authorizer"
-  autoload :AuthData,     "bravo/auth_data"
-  autoload :Bill,         "bravo/bill"
-  autoload :Constants,    "bravo/constants"
-  autoload :Wsaa,         "bravo/wsaa"
-  autoload :Reference,    "bravo/reference"
+  autoload :Authorizer,   'bravo/authorizer'
+  autoload :AuthData,     'bravo/auth_data'
+  autoload :Bill,         'bravo/bill'
+  autoload :Constants,    'bravo/constants'
+  autoload :Wsaa,         'bravo/wsaa'
+  autoload :Reference,    'bravo/reference'
 
   extend self
 

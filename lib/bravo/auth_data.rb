@@ -34,14 +34,14 @@ module Bravo
       # @return [Hash]
       #
       def auth_hash
-        { "Token" => Bravo::TOKEN, "Sign"  => Bravo::SIGN, "Cuit"  => Bravo.cuit }
+        { 'Token' => Bravo::TOKEN, 'Sign'  => Bravo::SIGN, 'Cuit'  => Bravo.cuit }
       end
 
       # Returns the right wsaa url for the specific environment
       # @return [String]
       #
       def wsaa_url
-        raise "Environment not sent to either :test or :production" unless Bravo::URLS.keys.include? environment
+        raise 'Environment not sent to either :test or :production' unless Bravo::URLS.keys.include? environment
         Bravo::URLS[environment][:wsaa]
       end
 
@@ -49,7 +49,7 @@ module Bravo
       # @return [String]
       #
       def wsfe_url
-        raise "Environment not sent to either :test or :production" unless Bravo::URLS.keys.include? environment
+        raise 'Environment not sent to either :test or :production' unless Bravo::URLS.keys.include? environment
         Bravo::URLS[environment][:wsfe]
       end
 

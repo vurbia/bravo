@@ -15,7 +15,7 @@ module Bravo
     def initialize(attrs = {})
       Bravo::AuthData.fetch
       @client           = Savon.client(wsdl: Bravo::AuthData.wsfe_url, log: false)
-      @body             = { "Auth" => Bravo::AuthData.auth_hash }
+      @body             = { 'Auth' => Bravo::AuthData.auth_hash }
       self.iva_cond     = attrs[:iva_cond]
       @net              = attrs[:net]           || 0
       self.documento    = attrs[:documento]     || Bravo.default_documento
@@ -29,10 +29,9 @@ module Bravo
     # @return [String] the document type string
     #
     def cbte_type
-      own_iva = Bravo::BILL_TYPE.has_key?(Bravo.own_iva_cond) ? Bravo::BILL_TYPE[Bravo.own_iva_cond] : raise(NullOrInvalidAttribute.new, "Own iva_cond is invalid.")
-      target_iva = own_iva.has_key?(iva_cond) ? own_iva[iva_cond] : raise(NullOrInvalidAttribute.new, "Target iva_cond is invalid.")
-      type = target_iva.has_key?(invoice_type) ? target_iva[invoice_type] : raise(NullOrInvalidAttribute.new, "Selected invoice_type is invalid.")
-
+      own_iva = Bravo::BILL_TYPE.has_key?(Bravo.own_iva_cond) ? Bravo::BILL_TYPE[Bravo.own_iva_cond] : raise(NullOrInvalidAttribute.new, 'Own iva_cond is invalid.')
+      target_iva = own_iva.has_key?(iva_cond) ? own_iva[iva_cond] : raise(NullOrInvalidAttribute.new, 'Target iva_cond is invalid.')
+      type = target_iva.has_key?(invoice_type) ? target_iva[invoice_type] : raise(NullOrInvalidAttribute.new, 'Selected invoice_type is invalid.')
     end
 
     # Calculates the total field for the invoice by adding
@@ -60,7 +59,7 @@ module Bravo
     def authorize
       setup_bill
       response = client.call(:fecae_solicitar) do |soap|
-        # soap.namespaces["xmlns"] = "http://ar.gov.afip.dif.FEV1/"
+        # soap.namespaces['xmlns'] = 'http://ar.gov.afip.dif.FEV1/'
         soap.message body
       end
 
@@ -74,36 +73,36 @@ module Bravo
     def setup_bill
       today = Time.new.strftime('%Y%m%d')
 
-      fecaereq = { "FeCAEReq" => {
-                    "FeCabReq" => Bravo::Bill.header(cbte_type),
-                    "FeDetReq" => {
-                      "FECAEDetRequest" => {
-                        "Concepto"    => Bravo::CONCEPTOS[concepto],
-                        "DocTipo"     => Bravo::DOCUMENTOS[documento],
-                        "CbteFch"     => today,
-                        "ImpTotConc"  => 0.00,
-                        "MonId"       => Bravo::MONEDAS[moneda][:codigo],
-                        "MonCotiz"    => 1,
-                        "ImpOpEx"     => 0.00,
-                        "ImpTrib"     => 0.00,
-                        "Iva"         => {
-                          "AlicIva" => {
-                            "Id" => "5",
-                            "BaseImp" => net,
-                            "Importe" => iva_sum } } } } } }
+      fecaereq = { 'FeCAEReq' => {
+                    'FeCabReq' => Bravo::Bill.header(cbte_type),
+                    'FeDetReq' => {
+                      'FECAEDetRequest' => {
+                        'Concepto'    => Bravo::CONCEPTOS[concepto],
+                        'DocTipo'     => Bravo::DOCUMENTOS[documento],
+                        'CbteFch'     => today,
+                        'ImpTotConc'  => 0.00,
+                        'MonId'       => Bravo::MONEDAS[moneda][:codigo],
+                        'MonCotiz'    => 1,
+                        'ImpOpEx'     => 0.00,
+                        'ImpTrib'     => 0.00,
+                        'Iva'         => {
+                          'AlicIva' => {
+                            'Id' => '5',
+                            'BaseImp' => net,
+                            'Importe' => iva_sum } } } } } }
 
-      detail = fecaereq["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"]
+      detail = fecaereq['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
-      detail["DocNro"]    = doc_num
-      detail["ImpNeto"]   = net.to_f
-      detail["ImpIVA"]    = iva_sum
-      detail["ImpTotal"]  = total
-      detail["CbteDesde"] = detail["CbteHasta"] = Bravo::Reference.next_bill_number(cbte_type)
+      detail['DocNro']    = doc_num
+      detail['ImpNeto']   = net.to_f
+      detail['ImpIVA']    = iva_sum
+      detail['ImpTotal']  = total
+      detail['CbteDesde'] = detail['CbteHasta'] = Bravo::Reference.next_bill_number(cbte_type)
 
       unless concepto == 0
-        detail.merge!({ "FchServDesde"  => fch_serv_desde || today,
-                        "FchServHasta"  => fch_serv_hasta || today,
-                        "FchVtoPago"    => due_date       || today })
+        detail.merge!({ 'FchServDesde'  => fch_serv_desde || today,
+                        'FchServHasta'  => fch_serv_hasta || today,
+                        'FchVtoPago'    => due_date       || today })
       end
 
       body.merge!(fecaereq)
@@ -113,7 +112,7 @@ module Bravo
     # @return [Boolean] the response result
     #
     def authorized?
-      !response.nil? && response.header_result == "A" && response.detail_result == "A"
+      !response.nil? && response.header_result == 'A' && response.detail_result == 'A'
     end
 
     private
@@ -124,7 +123,7 @@ module Bravo
       #
       def header(cbte_type)
         # todo sacado de la factura
-        { "CantReg" => "1", "CbteTipo" => cbte_type, "PtoVta" => Bravo.sale_point }
+        { 'CantReg' => '1', 'CbteTipo' => cbte_type, 'PtoVta' => Bravo.sale_point }
       end
     end
 
@@ -139,10 +138,10 @@ module Bravo
       response_header = result[:fe_cab_resp]
       response_detail = result[:fe_det_resp][:fecae_det_response]
 
-      request_header  = body["FeCAEReq"]["FeCabReq"].underscore_keys.symbolize_keys
-      request_detail  = body["FeCAEReq"]["FeDetReq"]["FECAEDetRequest"].underscore_keys.symbolize_keys
+      request_header  = body['FeCAEReq']['FeCabReq'].underscore_keys.symbolize_keys
+      request_detail  = body['FeCAEReq']['FeDetReq']['FECAEDetRequest'].underscore_keys.symbolize_keys
 
-      iva             = request_detail.delete(:iva)["AlicIva"].underscore_keys.symbolize_keys
+      iva             = request_detail.delete(:iva)['AlicIva'].underscore_keys.symbolize_keys
 
       request_detail.merge!(iva)
 
@@ -160,7 +159,7 @@ module Bravo
                         }.merge!(request_header).merge!(request_detail)
 
       keys, values  = response_hash.to_a.transpose
-      self.response = (defined?(Struct::Response) ? Struct::Response : Struct.new("Response", *keys)).new(*values)
+      self.response = (defined?(Struct::Response) ? Struct::Response : Struct.new('Response', *keys)).new(*values)
     end
   end
 end

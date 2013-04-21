@@ -17,21 +17,21 @@ module Bravo
     end
 
     protected
-    # Builds the xml for the "Ticket de Requerimiento de Acceso"
+    # Builds the xml for the 'Ticket de Requerimiento de Acceso'
     # @return [String] containing the request body
     #
     def self.build_tra
-      now = Time.now
-      from = now.strftime("%FT%T%:z")
-      to   = ((now - 120) + (24*60*60)).strftime("%FT%T%:z") # make sure ti will last for 24hs - 2 mins
-      id   = now.strftime("%s")
+      @now = (Time.now) - 120
+      @from = @now.strftime('%FT%T%:z')
+      @to   = (@now + ((12*60*60))).strftime('%FT%T%:z')
+      @id   = @now.strftime('%s')
       tra  = <<-EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <loginTicketRequest version="1.0">
   <header>
-    <uniqueId>#{ id }</uniqueId>
-    <generationTime>#{ from }</generationTime>
-    <expirationTime>#{ to }</expirationTime>
+    <uniqueId>#{ @id }</uniqueId>
+    <generationTime>#{ @from }</generationTime>
+    <expirationTime>#{ @to }</expirationTime>
   </header>
   <service>wsfe</service>
 </loginTicketRequest>
