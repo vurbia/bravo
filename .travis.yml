@@ -7,5 +7,3 @@ bundler_args: --without test
 branches:
   only:
     - master
-env:
-  - TRAVISCI = yes
