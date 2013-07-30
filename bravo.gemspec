@@ -14,6 +14,7 @@ Gem::Specification.new do |gem|
   gem.date          = %q(2011-03-14)
 
   gem.files         = `git ls-files`.split($/)
+  gem.files.reject! { |f| f.include? 'vcr' }
   gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib", "bin"]
