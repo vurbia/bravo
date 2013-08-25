@@ -26,7 +26,7 @@ tmtags
 log/
 log/*.log
 ./fixtures/
-./fixtures/*
+./fixtures/vcr_cassettes/
 *.gem
 tmp/
 bin/bravo-certs/
