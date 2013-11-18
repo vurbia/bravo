@@ -19,8 +19,8 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib", "bin"]
 
-  gem.add_runtime_dependency(%q<savon>, ["~> 2.1.0"])
-  gem.add_runtime_dependency(%q<thor>, ["~> 0.16.0"])
+  gem.add_runtime_dependency(%q<savon>, ["~> 2.3.0"])
+  gem.add_runtime_dependency(%q<thor>, ["~> 0.17.0"])
 
   gem.add_development_dependency(%q<rspec>, ["~> 2.12.0"])
   gem.add_development_dependency(%q<rspec-mocks>, ["~> 2.12.1"])
