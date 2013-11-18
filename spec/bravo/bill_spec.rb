@@ -69,8 +69,7 @@ describe 'Bill' do
       bill.concepto   = 'Servicios'
     end
 
-    use_vcr_cassette 'setup_bill_ommitted_date'
-    it 'uses today dates when due and service dates are ommitted' do
+    it 'uses today dates when due and service dates are ommitted', vcr: { cassette_name: 'setup_bill_ommitted_date' } do
       bill.setup_bill
 
       detail = bill.body['FeCAEReq']['FeDetReq']['FECAEDetRequest']
@@ -80,8 +79,7 @@ describe 'Bill' do
       detail['FchVtoPago'].should   == Time.new.strftime('%Y%m%d')
     end
 
-    use_vcr_cassette 'setup_bill_given_date'
-    it 'uses given due and service dates' do
+    it 'uses given due and service dates', vcr: { cassette_name: 'setup_bill_given_date' } do
       bill.due_date       = Date.new(2011, 12, 10).strftime('%Y%m%d')
       bill.fch_serv_desde = Date.new(2011, 11, 01).strftime('%Y%m%d')
       bill.fch_serv_hasta = Date.new(2011, 11, 30).strftime('%Y%m%d')
@@ -101,8 +99,8 @@ describe 'Bill' do
       Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
         describe "issued to #{ target_iva_cond.to_s }" do
           Bravo::BILL_TYPE[Bravo.own_iva_cond][target_iva_cond].keys.each do |bill_type|
-            use_vcr_cassette "#{ target_iva_cond.to_s }_and_#{ bill_type }"
-            it "authorizes bill type #{ bill_type }" do
+            vcr_options = { cassette_name: "#{ target_iva_cond.to_s }_and_#{ bill_type }" }
+            it "authorizes bill type #{ bill_type }", vcr: vcr_options do
               bill.net          = 10000.00
               bill.aliciva_id   = 2
               bill.doc_num      = '30710151543'

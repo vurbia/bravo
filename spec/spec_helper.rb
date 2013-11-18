@@ -13,13 +13,13 @@ end
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
   c.hook_into :fakeweb
+  c.configure_rspec_metadata!
 end
 
 RSpec.configure do |config|
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.filter_run :focus => true
   config.run_all_when_everything_filtered = true
-  config.extend VCR::RSpec::Macros
 end
 
 Bravo.pkey              = 'spec/fixtures/certs/pkey'

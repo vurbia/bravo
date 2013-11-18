@@ -32,8 +32,7 @@ EOF
   end
 
   describe '.login' do
-    use_vcr_cassette "login"
-    xit 'should work' do
+    xit 'should work', vcr: { cassette_name: 'login' } do
       Bravo::Wsaa.login.should be_true
     end
   end
