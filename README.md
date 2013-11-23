@@ -64,14 +64,14 @@ Bravo.default_moneda    			 = :peso
 Bravo.own_iva_cond      			 = :responsable_inscripto
 Bravo.verbose           			 = 'true'
 Bravo.openssl_bin       			 = '/usr/local/Cellar/openssl/1.0.1e/bin/openssl'
-Bravo::AuthData.environment         = :test
+Bravo::AuthData.environment			 = :test
 ```
 ### Emisión de comprobantes
 
 Para emitir un comprobante, basta con:
 
 * instanciar la clase `Bill`,
-* pasarle los parámetros típicos del comprobante, como si lo llenásemos a mano
+* pasarle los parámetros típicos del comprobante, como si lo llenásemos a mano,
 * llamar el método `authorize`, para que el WSFE autorice el comprobante que acabamos de 'llenar':
 
 #### Ejemplo
@@ -89,19 +89,18 @@ factura = Bravo::Bill.new
 
 factura.net          = 100.00				# el neto de la factura, total para Consumidor final
 factura.aliciva_id   = 2					# define la alicuota de iva a utilizar, ver archivo constants.
-factura.iva_cond     = :consumidor_final   # la condición ante el iva del comprador		
+factura.iva_cond     = :consumidor_final	# la condición ante el iva del comprador
 factura.concepto     = 'Servicios'			# concepto de la factura
 factura.invoice_type = :invoice				# el tipo de comprobante a emitir, en este caso factura.
 
-bill.authorize						
-bill.authorized?.should  == true
+bill.authorize
 
 bill.response.cae							# contiene el cae para este comprobante.
 ```
 
 ## TODO list
 
-* rdoc
+* ~~rdoc~~
 * mensajes de error m&aacute;s completos
 
 
