@@ -14,7 +14,8 @@ module Bravo
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      @client           = Savon.client(wsdl: Bravo::AuthData.wsfe_url, log: false)
+      opts = { wsdl: Bravo::AuthData.wsfe_url}.merge! Bravo.logger_options
+      @client           = Savon.client(opts)
       @body             = { 'Auth' => Bravo::AuthData.auth_hash }
       self.iva_cond     = attrs[:iva_cond]
       @net              = attrs[:net]           || 0
