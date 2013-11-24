@@ -3,7 +3,7 @@ require 'bravo'
 require 'rspec'
 require 'vcr'
 require 'simplecov'
-SimpleCov.start
+# SimpleCov.start
 
 begin
   require 'debugger'
