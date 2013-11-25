@@ -24,10 +24,10 @@ module Bravo
     # @param pretty_xml [Boolean] pass true to format xml in a readable way.
     # @param level [Symbol] one of `:debug`, `:info`, `:warn`, `:error`, `:fatal`.
 
-    def initialize(log = false, level = :debug, pretty_xml = true)
-      self.log = log
-      self.pretty_xml = pretty_xml
-      self.level = level
+    def initialize(opts = {})
+      self.log = opts[:log] || false
+      self.pretty_xml = opts[:pretty_xml] || self.log
+      self.level = opts[:level] || :debug
     end
 
     # @return [Hash] returns a hash with the proper logging optios for Savon.
