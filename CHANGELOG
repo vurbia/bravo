@@ -1,4 +1,7 @@
-*Bravo 1.0.0.alpha (March 30, 2013)*
+*Bravo 1.0.0.rc1 (November 25, 2013)*
+* Added full support for Savon logging options
+
+*Bravo 1.0.0.alpha (March 30 - Nov 25, 2013)*
 
 * Updated dependencies
 * Added reference class that will pass any method to the api, without a message
