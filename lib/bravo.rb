@@ -19,9 +19,8 @@ module Bravo
   # This class handles the logging options
   #
   class Logger < Struct.new(:log, :pretty_xml, :level)
-    # @param log [Boolean] wether to log or not.
-    # @param pretty_xml [Boolean] pass true to format xml in a readable way.
-    # @param level [Symbol] one of `:debug`, `:info`, `:warn`, `:error`, `:fatal`.
+    # @param opts [Hash] receives a hash with keys `log`, `pretty_xml` (both
+    # boolean) or the desired log level as `level`
 
     def initialize(opts = {})
       self.log = opts[:log] || false
