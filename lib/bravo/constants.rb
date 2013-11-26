@@ -59,7 +59,16 @@ module Bravo
   #
   ALIC_IVA = [['03', 0], ['04', 0.105], ['05', 0.21], ['06', 0.27]]
 
-
+  # Applicable tax according to buyer and seller's iva condition.
+  #
+  APPLICABLE_IVA = {
+    :responsable_inscripto => {
+      responsable_inscripto: 02,
+      consumidor_final: 00,
+      exento: 00,
+      responsable_monotributo: 00
+    }
+  }
 
   # This hash keeps the codes for A document types by operation
   #

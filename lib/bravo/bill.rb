@@ -50,8 +50,7 @@ module Bravo
     # TODO: fix this
     #
     def iva_sum
-      @iva_sum = net * Bravo::ALIC_IVA[aliciva_id][1]
-      @iva_sum
+      @iva_sum = net * applicable_iva_multiplier
       @iva_sum.round(2)
     end
 
@@ -89,7 +88,7 @@ module Bravo
                         'ImpTrib'     => 0.00,
                         'Iva'         => {
                           'AlicIva' => {
-                            'Id' => '5',
+                            'Id' => applicable_iva_code,
                             'BaseImp' => net,
                             'Importe' => iva_sum } } } } } }
 
@@ -162,6 +161,19 @@ module Bravo
 
       keys, values  = response_hash.to_a.transpose
       self.response = (defined?(Struct::Response) ? Struct::Response : Struct.new('Response', *keys)).new(*values)
+    end
+
+    def applicable_iva
+      index = Bravo::APPLICABLE_IVA[Bravo.own_iva_cond][iva_cond]
+      Bravo::ALIC_IVA[index]
+    end
+
+    def applicable_iva_code
+      applicable_iva[0]
+    end
+
+    def applicable_iva_multiplier
+      applicable_iva[1]
     end
   end
 end
