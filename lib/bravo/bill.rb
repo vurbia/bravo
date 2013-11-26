@@ -14,8 +14,8 @@ module Bravo
 
     def initialize(attrs = {})
       Bravo::AuthData.fetch
-      opts = { wsdl: Bravo::AuthData.wsfe_url}.merge! Bravo.logger_options
-      @client           = Savon.client(opts)
+      opts = { wsdl: Bravo::AuthData.wsfe_url }.merge! Bravo.logger_options
+      @client           ||= Savon.client(opts)
       @body             = { 'Auth' => Bravo::AuthData.auth_hash }
       self.iva_cond     = attrs[:iva_cond]
       @net              = attrs[:net]           || 0
@@ -51,7 +51,8 @@ module Bravo
     #
     def iva_sum
       @iva_sum = net * Bravo::ALIC_IVA[aliciva_id][1]
-      @iva_sum.round_up_with_precision(2)
+      @iva_sum
+      @iva_sum.round(2)
     end
 
     # Files the authorization request to AFIP

@@ -55,8 +55,8 @@ describe 'Bill' do
       bill.net          = 100.89
       bill.aliciva_id   = 2
 
-      bill.iva_sum.should be_within(0.05).of(21.18)
-      bill.total.should be_within(0.05).of(122.07)
+      bill.iva_sum.should be_within(0.005).of(21.19)
+      bill.total.should be_within(0.005).of(122.08)
     end
   end
 
@@ -101,7 +101,7 @@ describe 'Bill' do
           Bravo::BILL_TYPE[Bravo.own_iva_cond][target_iva_cond].keys.each do |bill_type|
             vcr_options = { cassette_name: "#{ target_iva_cond.to_s }_and_#{ bill_type }" }
             it "authorizes bill type #{ bill_type }", vcr: vcr_options do
-              bill.net          = 10000.00
+              bill.net          = 10000.88
               bill.aliciva_id   = 2
               bill.doc_num      = '30710151543'
               bill.iva_cond     = target_iva_cond
