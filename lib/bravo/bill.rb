@@ -13,7 +13,6 @@ module Bravo
                   :body, :response, :invoice_type
 
     def initialize(attrs = {})
-      Bravo::AuthData.fetch
       opts = { wsdl: Bravo::AuthData.wsfe_url }.merge! Bravo.logger_options
       @client           ||= Savon.client(opts)
       @body             = { 'Auth' => Bravo::AuthData.auth_hash }
@@ -89,7 +88,7 @@ module Bravo
                         'Iva'         => {
                           'AlicIva' => {
                             'Id' => applicable_iva_code,
-                            'BaseImp' => net,
+                            'BaseImp' => net.round(2),
                             'Importe' => iva_sum } } } } } }
 
       detail = fecaereq['FeCAEReq']['FeDetReq']['FECAEDetRequest']
@@ -160,6 +159,7 @@ module Bravo
                         }.merge!(request_header).merge!(request_detail)
 
       keys, values  = response_hash.to_a.transpose
+
       self.response = (defined?(Struct::Response) ? Struct::Response : Struct.new('Response', *keys)).new(*values)
     end
 
