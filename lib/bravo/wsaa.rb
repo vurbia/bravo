@@ -89,7 +89,7 @@ XML
 token: #{certs[0]}
 sign: #{certs[1]}
 YML
-    `echo '#{ yml }' > /tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%d_%m_%Y') }.yml`
+    `echo '#{ yml }' > /tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%Y_%m_%d') }.yml`
     end
 
   end

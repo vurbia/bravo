@@ -23,10 +23,10 @@ module Bravo
 
         unless File.exists?(todays_data_file_name)
           Bravo::Wsaa.login
+        end
 
-          YAML.load_file(todays_data_file_name).each do |k, v|
-            Bravo.const_set(k.to_s.upcase, v) unless Bravo.const_defined?(k.to_s.upcase)
-          end
+        YAML.load_file(todays_data_file_name).each do |k, v|
+          Bravo.const_set(k.to_s.upcase, v) unless Bravo.const_defined?(k.to_s.upcase)
         end
       end
 
@@ -57,7 +57,7 @@ module Bravo
       # @return [String]
       #
       def todays_data_file_name
-        @todays_data_file ||= "/tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%d_%m_%Y') }.yml"
+        @todays_data_file ||= "/tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%Y_%m_%d') }.yml"
       end
     end
   end
