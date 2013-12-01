@@ -22,38 +22,38 @@ describe 'Bill' do
         bill.body['Auth'][key].should_not == nil
       end
 
-      bill.documento.should == Bravo.default_documento
-      bill.moneda.should    == Bravo.default_moneda
+      bill.document_type.should == Bravo.default_documento
+      bill.currency.should == Bravo.default_moneda
     end
   end
 
-  describe '#cbte_type' do
+  describe '#bill_type' do
     before { bill.invoice_type = :invoice }
     it 'returns the bill type for Responsable Inscripto' do
-      bill.iva_cond = :responsable_inscripto
+      bill.iva_condition = :responsable_inscripto
 
-      bill.cbte_type.should == '01'
+      bill.bill_type.should == '01'
     end
 
     it 'returns the bill type for Consumidor Final' do
-      bill.iva_cond = :consumidor_final
+      bill.iva_condition = :consumidor_final
 
-      bill.cbte_type.should == '06'
+      bill.bill_type.should == '06'
     end
 
     it 'raises error on nil or invalid iva cond' do
-      bill.iva_cond = 12
+      bill.iva_condition = 12
 
-      expect { bill.cbte_type }.to raise_error(Bravo::NullOrInvalidAttribute)
+      expect { bill.bill_type }.to raise_error(Bravo::NullOrInvalidAttribute)
     end
   end
 
   describe '#iva_sum and #total' do
     it 'calculate the IVA array values' do
-      bill.iva_cond     = :responsable_inscripto
-      bill.moneda       = :peso
-      bill.net          = 100.89
-      bill.aliciva_id   = 2
+      bill.iva_condition  = :responsable_inscripto
+      bill.currency       = :peso
+      bill.net            = 100.89
+      bill.aliciva_id     = 2
 
       bill.iva_sum.should be_within(0.005).of(21.19)
       bill.total.should be_within(0.005).of(122.08)
@@ -64,9 +64,9 @@ describe 'Bill' do
     before do
       bill.net        = 100
       bill.aliciva_id = 2
-      bill.doc_num    = '30710151543'
-      bill.iva_cond   = :responsable_inscripto
-      bill.concepto   = 'Servicios'
+      bill.document_number    = '30710151543'
+      bill.iva_condition   = :responsable_inscripto
+      bill.concept   = 'Servicios'
     end
 
     it 'uses today dates when due and service dates are ommitted', vcr: { cassette_name: 'setup_bill_ommitted_date' } do
@@ -80,9 +80,9 @@ describe 'Bill' do
     end
 
     it 'uses given due and service dates', vcr: { cassette_name: 'setup_bill_given_date' } do
-      bill.due_date       = Date.new(2011, 12, 10).strftime('%Y%m%d')
-      bill.fch_serv_desde = Date.new(2011, 11, 01).strftime('%Y%m%d')
-      bill.fch_serv_hasta = Date.new(2011, 11, 30).strftime('%Y%m%d')
+      bill.due_date   = Date.new(2011, 12, 10).strftime('%Y%m%d')
+      bill.date_from  = Date.new(2011, 11, 01).strftime('%Y%m%d')
+      bill.date_to    = Date.new(2011, 11, 30).strftime('%Y%m%d')
 
       bill.setup_bill
 
@@ -103,9 +103,9 @@ describe 'Bill' do
             it "authorizes bill type #{ bill_type }", vcr: vcr_options do
               bill.net          = 10000.88
               bill.aliciva_id   = 2
-              bill.doc_num      = '30710151543'
-              bill.iva_cond     = target_iva_cond
-              bill.concepto     = 'Servicios'
+              bill.document_number      = '30710151543'
+              bill.iva_condition     = target_iva_cond
+              bill.concept     = 'Servicios'
               bill.invoice_type = bill_type
 
               bill.authorized?.should  == false

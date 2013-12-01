@@ -8,29 +8,29 @@ module Bravo
     #
     attr_reader :client
 
-    attr_accessor :net, :doc_num, :iva_cond, :documento, :concepto, :moneda,
-                  :due_date, :aliciva_id, :fch_serv_desde, :fch_serv_hasta,
-                  :body, :response, :invoice_type
+    attr_accessor :net, :document_number, :iva_condition, :document_type, :concept,
+      :currency, :due_date, :aliciva_id, :date_from, :date_to, :body, :response,
+      :invoice_type
 
     def initialize(attrs = {})
       opts = { wsdl: Bravo::AuthData.wsfe_url }.merge! Bravo.logger_options
-      @client           ||= Savon.client(opts)
-      @body             = { 'Auth' => Bravo::AuthData.auth_hash }
-      self.iva_cond     = attrs[:iva_cond]
-      @net              = attrs[:net]           || 0
-      self.documento    = attrs[:documento]     || Bravo.default_documento
-      self.moneda       = attrs[:moneda]        || Bravo.default_moneda
-      self.concepto     = attrs[:concepto]      || Bravo.default_concepto
-      self.invoice_type = attrs[:invoice_type]  || :invoice
+      @client       ||= Savon.client(opts)
+      @body           = { 'Auth' => Bravo::AuthData.auth_hash }
+      @iva_condition  = attrs[:iva_condition]
+      @net            = attrs[:net]           || 0
+      @document_type  = attrs[:document_type] || Bravo.default_documento
+      @currency       = attrs[:currency]      || Bravo.default_moneda
+      @concept        = attrs[:concept]       || Bravo.default_concepto
+      @invoice_type   = attrs[:invoice_type]  || :invoice
     end
 
     # Searches the corresponding invoice type according to the combination of
     # the seller's IVA condition and the buyer's IVA condition
     # @return [String] the document type string
     #
-    def cbte_type
-      own_iva = Bravo::BILL_TYPE.has_key?(Bravo.own_iva_cond) ? Bravo::BILL_TYPE[Bravo.own_iva_cond] : raise(NullOrInvalidAttribute.new, 'Own iva_cond is invalid.')
-      target_iva = own_iva.has_key?(iva_cond) ? own_iva[iva_cond] : raise(NullOrInvalidAttribute.new, 'Target iva_cond is invalid.')
+    def bill_type
+      own_iva = Bravo::BILL_TYPE[Bravo.own_iva_cond]
+      target_iva = own_iva.has_key?(iva_condition) ? own_iva[iva_condition] : raise(NullOrInvalidAttribute.new, 'Target iva_cond is invalid.')
       type = target_iva.has_key?(invoice_type) ? target_iva[invoice_type] : raise(NullOrInvalidAttribute.new, 'Selected invoice_type is invalid.')
     end
 
@@ -74,14 +74,14 @@ module Bravo
       today = Time.new.strftime('%Y%m%d')
 
       fecaereq = { 'FeCAEReq' => {
-                    'FeCabReq' => Bravo::Bill.header(cbte_type),
+                    'FeCabReq' => Bravo::Bill.header(bill_type),
                     'FeDetReq' => {
                       'FECAEDetRequest' => {
-                        'Concepto'    => Bravo::CONCEPTOS[concepto],
-                        'DocTipo'     => Bravo::DOCUMENTOS[documento],
+                        'Concepto'    => Bravo::CONCEPTOS[concept],
+                        'DocTipo'     => Bravo::DOCUMENTOS[document_type],
                         'CbteFch'     => today,
                         'ImpTotConc'  => 0.00,
-                        'MonId'       => Bravo::MONEDAS[moneda][:codigo],
+                        'MonId'       => Bravo::MONEDAS[currency][:codigo],
                         'MonCotiz'    => 1,
                         'ImpOpEx'     => 0.00,
                         'ImpTrib'     => 0.00,
@@ -93,16 +93,16 @@ module Bravo
 
       detail = fecaereq['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
-      detail['DocNro']    = doc_num
+      detail['DocNro']    = document_number
       detail['ImpNeto']   = net.to_f
       detail['ImpIVA']    = iva_sum
       detail['ImpTotal']  = total
-      detail['CbteDesde'] = detail['CbteHasta'] = Bravo::Reference.next_bill_number(cbte_type)
+      detail['CbteDesde'] = detail['CbteHasta'] = Bravo::Reference.next_bill_number(bill_type)
 
-      unless concepto == 0
-        detail.merge!({ 'FchServDesde'  => fch_serv_desde || today,
-                        'FchServHasta'  => fch_serv_hasta || today,
-                        'FchVtoPago'    => due_date       || today })
+      unless concept == 0
+        detail.merge!({ 'FchServDesde'  => date_from  || today,
+                        'FchServHasta'  => date_to    || today,
+                        'FchVtoPago'    => due_date   || today })
       end
 
       body.merge!(fecaereq)
@@ -121,9 +121,9 @@ module Bravo
       # Sets the header hash for the request
       # @return [Hash]
       #
-      def header(cbte_type)
+      def header(bill_type)
         # todo sacado de la factura
-        { 'CantReg' => '1', 'CbteTipo' => cbte_type, 'PtoVta' => Bravo.sale_point }
+        { 'CantReg' => '1', 'CbteTipo' => bill_type, 'PtoVta' => Bravo.sale_point }
       end
     end
 
@@ -164,7 +164,7 @@ module Bravo
     end
 
     def applicable_iva
-      index = Bravo::APPLICABLE_IVA[Bravo.own_iva_cond][iva_cond]
+      index = Bravo::APPLICABLE_IVA[Bravo.own_iva_cond][iva_condition]
       Bravo::ALIC_IVA[index]
     end
 
