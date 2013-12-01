@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'bundler/setup'
 require 'bravo/version'
 require 'bravo/constants'
@@ -65,6 +66,14 @@ module Bravo
     # Returs the formatted logger options to be used by Savon.
     def logger_options
       logger.logger_options
+    end
+
+    def own_iva_cond=(iva_cond_symbol)
+      if Bravo::BILL_TYPE.has_key?(iva_cond_symbol)
+        @own_iva_cond = iva_cond_symbol
+      else
+        raise(NullOrInvalidAttribute.new, "El valor de  own_iva_cond: (#{ iva_cond_symbol }) es inválido.")
+      end
     end
   end
 end
