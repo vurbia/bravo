@@ -1,3 +1,4 @@
+# encoding: utf-8
 module Bravo
   # The main class in Bravo. Handles WSFE method interactions.
   # Subsequent implementations will be added here (maybe).
@@ -16,12 +17,12 @@ module Bravo
       opts = { wsdl: Bravo::AuthData.wsfe_url }.merge! Bravo.logger_options
       @client       ||= Savon.client(opts)
       @body           = { 'Auth' => Bravo::AuthData.auth_hash }
-      @iva_condition  = attrs[:iva_condition]
+      @iva_condition  = validate_iva_condition(attrs[:iva_condition])
       @net            = attrs[:net]           || 0
       @document_type  = attrs[:document_type] || Bravo.default_documento
       @currency       = attrs[:currency]      || Bravo.default_moneda
       @concept        = attrs[:concept]       || Bravo.default_concepto
-      @invoice_type   = attrs[:invoice_type]  || :invoice
+      @invoice_type   = validate_invoice_type(attrs[:invoice_type])
     end
 
     # Searches the corresponding invoice type according to the combination of
@@ -29,9 +30,7 @@ module Bravo
     # @return [String] the document type string
     #
     def bill_type
-      own_iva = Bravo::BILL_TYPE[Bravo.own_iva_cond]
-      target_iva = own_iva.has_key?(iva_condition) ? own_iva[iva_condition] : raise(NullOrInvalidAttribute.new, 'Target iva_cond is invalid.')
-      type = target_iva.has_key?(invoice_type) ? target_iva[invoice_type] : raise(NullOrInvalidAttribute.new, 'Selected invoice_type is invalid.')
+      Bravo::BILL_TYPE[Bravo.own_iva_cond][iva_condition][invoice_type]
     end
 
     # Calculates the total field for the invoice by adding
@@ -174,6 +173,25 @@ module Bravo
 
     def applicable_iva_multiplier
       applicable_iva[1]
+    end
+
+    def validate_iva_condition(iva_cond)
+      valid_conditions = Bravo::BILL_TYPE[Bravo.own_iva_cond].keys
+      if valid_conditions.include? iva_cond
+        iva_cond
+      else
+        raise(NullOrInvalidAttribute.new,
+              "El valor de iva_condition debe estar incluído en #{ valid_conditions }")
+      end
+    end
+
+    def validate_invoice_type(type)
+      if Bravo::BILL_TYPE_A.keys.include? type
+        type
+      else
+        raise(NullOrInvalidAttribute.new, "invoice_type debe estar incluido en \
+            #{ Bravo::BILL_TYPE_A.keys }")
+      end
     end
   end
 end

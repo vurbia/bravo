@@ -2,7 +2,7 @@
 require 'spec_helper'
 
 describe 'Bill' do
-  let(:bill) { @bill = Bravo::Bill.new }
+  let(:bill) { @bill = Bravo::Bill.new(iva_condition: :consumidor_final, invoice_type: :invoice) }
 
   describe '.header' do
     it 'sets up the header hash' do
@@ -39,12 +39,6 @@ describe 'Bill' do
       bill.iva_condition = :consumidor_final
 
       bill.bill_type.should == '06'
-    end
-
-    it 'raises error on nil or invalid iva cond' do
-      bill.iva_condition = 12
-
-      expect { bill.bill_type }.to raise_error(Bravo::NullOrInvalidAttribute)
     end
   end
 
