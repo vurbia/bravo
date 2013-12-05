@@ -9,24 +9,24 @@ end
 
 namespace :spec do
   desc "Run tests, deleting today's auth data file beforehand."
-  task clear_auth: [:delete_auth, :spec]
+  task clear_auth: [:rmauth, :spec]
 
   desc "Run tests, deleting vcr_cassettes beforehand."
-  task clear_cassettes: [:delete_cassettes, :spec]
+  task clear_cassettes: [:rmvcr, :spec]
 
   desc "Run tests, deleting both cassettes and auth data file beforehand."
-  task clear_all: [:delete_auth, :delete_cassettes, :spec]
+  task clear_all: [:rmvcr, :rmauth, :spec]
 end
 
 desc "Deletes todays auth data file."
-task :delete_auth do
+task :rmauth do
   puts 'Deleting file...'
   `rm /tmp/bravo*`
   puts 'Done, moving on.'
 end
 
 desc "Deletes vcr cassettes."
-task :delete_cassettes do
+task :rmvcr do
   puts 'Deleting cassettes...'
   `rm -rf spec/fixtures/vcr_cassettes`
   puts 'Done, moving on.'
