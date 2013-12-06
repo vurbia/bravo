@@ -34,6 +34,7 @@ module Bravo
       # @return [Hash]
       #
       def auth_hash
+        fetch unless Bravo.constants.include?(:TOKEN) && Bravo.constants.include?(:SIGN)
         { 'Token' => Bravo::TOKEN, 'Sign'  => Bravo::SIGN, 'Cuit'  => Bravo.cuit }
       end
 
