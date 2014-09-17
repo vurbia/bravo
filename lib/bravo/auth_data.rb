@@ -13,17 +13,10 @@ module Bravo
       # to be configured as Bravo.pkey and Bravo.cert
       #
       def fetch
-        unless File.exists?(Bravo.pkey)
-          raise "Archivo de llave privada no encontrado en #{ Bravo.pkey }"
-        end
+        raise "Archivo de llave privada no encontrado en #{ Bravo.pkey }" unless File.exist?(Bravo.pkey)
+        raise "Archivo certificado no encontrado en #{ Bravo.cert }" unless File.exist?(Bravo.cert)
 
-        unless File.exists?(Bravo.cert)
-          raise "Archivo certificado no encontrado en #{ Bravo.cert }"
-        end
-
-        unless File.exists?(todays_data_file_name)
-          Bravo::Wsaa.login
-        end
+        Bravo::Wsaa.login unless File.exist?(todays_data_file_name)
 
         YAML.load_file(todays_data_file_name).each do |k, v|
           Bravo.const_set(k.to_s.upcase, v) unless Bravo.const_defined?(k.to_s.upcase)
@@ -35,14 +28,14 @@ module Bravo
       #
       def auth_hash
         fetch unless Bravo.constants.include?(:TOKEN) && Bravo.constants.include?(:SIGN)
-        { 'Token' => Bravo::TOKEN, 'Sign'  => Bravo::SIGN, 'Cuit'  => Bravo.cuit }
+        { 'Token' => Bravo::TOKEN, 'Sign' => Bravo::SIGN, 'Cuit' => Bravo.cuit }
       end
 
       # Returns the right wsaa url for the specific environment
       # @return [String]
       #
       def wsaa_url
-        raise 'Environment not sent to either :test or :production' unless Bravo::URLS.keys.include? environment
+        check_environment!
         Bravo::URLS[environment][:wsaa]
       end
 
@@ -50,7 +43,7 @@ module Bravo
       # @return [String]
       #
       def wsfe_url
-        raise 'Environment not sent to either :test or :production' unless Bravo::URLS.keys.include? environment
+        check_environment!
         Bravo::URLS[environment][:wsfe]
       end
 
@@ -59,6 +52,10 @@ module Bravo
       #
       def todays_data_file_name
         @todays_data_file ||= "/tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%Y_%m_%d') }.yml"
+      end
+
+      def check_environment!
+        raise 'Environment not set.' unless Bravo::URLS.keys.include? environment
       end
     end
   end

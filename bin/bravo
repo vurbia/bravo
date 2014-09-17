@@ -10,11 +10,16 @@ module Bravo
 
     desc 'gencsr', 'Crea el Certificate Signature Request'
     method_option :bin,  type: :string, required: true, desc: 'El path completo al binario de openssl'
-    method_option :pkey, type: :string, desc: 'Path a una clave privada preexistente. Si se omite, se crea una clave en --out'
-    method_option :sn,   type: :string, required: true, desc: 'Nombre del servidor. Sin uso práctico, es requerido por AFIP'
-    method_option :cn,   type: :string, required: true, desc: 'Nombre de la compañía. Sin uso práctico, es requerido por AFIP'
-    method_option :cuit, type: :numeric, required: true, desc: 'Número de CUIT sin guiones. Ejemplo: 20876543217'
-    method_option :out,  type: :string, default: 'bravo-certs', desc: 'Directorio de destino para los archivos creados. Si se omite, se crea el directorio bravo-certs en pwd'
+    method_option :pkey, type: :string,
+      desc: 'Path a una clave privada preexistente. Si se omite, se crea una clave en --out'
+    method_option :sn,   type: :string, required: true,
+      desc: 'Nombre del servidor. Sin uso práctico, es requerido por AFIP'
+    method_option :cn,   type: :string, required: true,
+      desc: 'Nombre de la compañía. Sin uso práctico, es requerido por AFIP'
+    method_option :cuit, type: :numeric, required: true,
+      desc: 'Número de CUIT sin guiones. Ejemplo: 20876543217'
+    method_option :out,  type: :string, default: 'bravo-certs',
+      desc: 'Directorio de destino para los archivos creados. Default: "./bravo-certs"'
 
     # Certificate Signature Request wrapper for bravo.
     #
@@ -28,7 +33,7 @@ module Bravo
       cuit  = options[:cuit]
       out   = options[:out]
 
-      Dir.mkdir(out) unless File.exists?(out)
+      Dir.mkdir(out) unless File.exist?(out)
 
       out_path = "#{ Dir.pwd }/#{ out }/"
 
@@ -45,9 +50,10 @@ module Bravo
     end
 
     protected
+
     # Creates a new private key
     #
-    def create_pkey(bin,out_path)
+    def create_pkey(bin, out_path)
       say('Creando pkey', :cyan)
       `#{ bin } genrsa -out #{ out_path }pkey 1024`
       say('Hecho!\n\n', :green)

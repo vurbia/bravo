@@ -7,22 +7,22 @@ describe 'Bill' do
   describe '.header' do
     it 'sets up the header hash' do
       @header = Bravo::Bill.header(0)
-      @header.size.should == 3
-      ['CantReg', 'CbteTipo', 'PtoVta'].each do |key|
-        @header.has_key?(key).should == true
+      @header.size.should eql 3
+      %w[CantReg CbteTipo PtoVta].each do |key|
+        @header.key?(key).should == true
       end
     end
   end
 
   describe '.initialize' do
     it 'applies Bravos defaults' do
-      bill.client.class.name.should == 'Savon::Client'
+      bill.client.class.name.should eql 'Savon::Client'
 
-      ['Token', 'Sign', 'Cuit'].each do |key|
-        bill.body['Auth'][key].should_not == nil
+      %w[Token Sign Cuit].each do |key|
+        bill.body['Auth'][key].should_not eql nil
       end
 
-      bill.document_type.should == Bravo.default_documento
+      bill.document_type.should eql Bravo.default_documento
       bill.currency.should == Bravo.default_moneda
     end
   end
@@ -63,14 +63,14 @@ describe 'Bill' do
       bill.concept   = 'Servicios'
     end
 
-    it 'uses today dates when due and service dates are ommitted', vcr: { cassette_name: 'setup_bill_ommitted_date' } do
+    it 'uses today dates when due and service dates are null', vcr: { cassette_name: 'setup_bill_ommitted_date' } do
       bill.setup_bill
 
       detail = bill.body['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
-      detail['FchServDesde'].should == Time.new.strftime('%Y%m%d')
-      detail['FchServHasta'].should == Time.new.strftime('%Y%m%d')
-      detail['FchVtoPago'].should   == Time.new.strftime('%Y%m%d')
+      detail['FchServDesde'].should eql Time.new.strftime('%Y%m%d')
+      detail['FchServHasta'].should eql Time.new.strftime('%Y%m%d')
+      detail['FchVtoPago'].should   eql Time.new.strftime('%Y%m%d')
     end
 
     it 'uses given due and service dates', vcr: { cassette_name: 'setup_bill_given_date' } do
@@ -82,34 +82,34 @@ describe 'Bill' do
 
       detail = bill.body['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
-      detail['FchServDesde'].should == '20111101'
-      detail['FchServHasta'].should == '20111130'
-      detail['FchVtoPago'].should   == '20111210'
+      detail['FchServDesde'].should eql '20111101'
+      detail['FchServHasta'].should eql '20111130'
+      detail['FchVtoPago'].should   eql '20111210'
     end
   end
 
   describe '#authorize' do
     describe 'for facturas' do
       Bravo::BILL_TYPE[Bravo.own_iva_cond].keys.each do |target_iva_cond|
-        describe "issued to #{ target_iva_cond.to_s }" do
+        describe "issued to #{ target_iva_cond }" do
           Bravo::BILL_TYPE[Bravo.own_iva_cond][target_iva_cond].keys.each do |bill_type|
-            vcr_options = { cassette_name: "#{ target_iva_cond.to_s }_and_#{ bill_type }" }
+            vcr_options = { cassette_name: "#{ target_iva_cond }_and_#{ bill_type }" }
             it "authorizes bill type #{ bill_type }", vcr: vcr_options do
-              bill.net          = 10000.88
-              bill.aliciva_id   = 2
-              bill.document_number      = '30710151543'
-              bill.iva_condition     = target_iva_cond
-              bill.concept     = 'Servicios'
+              bill.net = 10_000.88
+              bill.aliciva_id = 2
+              bill.document_number = '30710151543'
+              bill.iva_condition = target_iva_cond
+              bill.concept = 'Servicios'
               bill.invoice_type = bill_type
 
-              bill.authorized?.should  == false
-              bill.authorize.should    == true
-              bill.authorized?.should  == true
+              bill.authorized?.should  eql false
+              bill.authorize.should    eql true
+              bill.authorized?.should  eql true
 
               response = bill.response
 
-              response.length.should     == 28
-              response.cae.length.should == 14
+              response.length.should     eql 28
+              response.cae.length.should eql 14
             end
           end
         end

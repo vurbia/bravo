@@ -9,9 +9,8 @@ module Bravo
     #
     attr_reader :client
 
-    attr_accessor :net, :document_number, :iva_condition, :document_type, :concept,
-      :currency, :due_date, :aliciva_id, :date_from, :date_to, :body, :response,
-      :invoice_type
+    attr_accessor :net, :document_number, :iva_condition, :document_type, :concept, :currency, :due_date,
+      :aliciva_id, :date_from, :date_to, :body, :response, :invoice_type
 
     def initialize(attrs = {})
       opts = { wsdl: Bravo::AuthData.wsfe_url }.merge! Bravo.logger_options
@@ -70,25 +69,7 @@ module Bravo
     # @return [Hash] returns the request body as a hash
     #
     def setup_bill
-      today = Time.new.strftime('%Y%m%d')
-
-      fecaereq = { 'FeCAEReq' => {
-                    'FeCabReq' => Bravo::Bill.header(bill_type),
-                    'FeDetReq' => {
-                      'FECAEDetRequest' => {
-                        'Concepto'    => Bravo::CONCEPTOS[concept],
-                        'DocTipo'     => Bravo::DOCUMENTOS[document_type],
-                        'CbteFch'     => today,
-                        'ImpTotConc'  => 0.00,
-                        'MonId'       => Bravo::MONEDAS[currency][:codigo],
-                        'MonCotiz'    => 1,
-                        'ImpOpEx'     => 0.00,
-                        'ImpTrib'     => 0.00,
-                        'Iva'         => {
-                          'AlicIva' => {
-                            'Id' => applicable_iva_code,
-                            'BaseImp' => net.round(2),
-                            'Importe' => iva_sum } } } } } }
+      fecaereq = setup_request_structure
 
       detail = fecaereq['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
@@ -99,9 +80,9 @@ module Bravo
       detail['CbteDesde'] = detail['CbteHasta'] = Bravo::Reference.next_bill_number(bill_type)
 
       unless concept == 0
-        detail.merge!({ 'FchServDesde'  => date_from  || today,
-                        'FchServHasta'  => date_to    || today,
-                        'FchVtoPago'    => due_date   || today })
+        detail.merge!('FchServDesde'  => date_from  || today,
+                      'FchServHasta'  => date_to    || today,
+                      'FchVtoPago'    => due_date   || today)
       end
 
       body.merge!(fecaereq)
@@ -121,7 +102,7 @@ module Bravo
       # @return [Hash]
       #
       def header(bill_type)
-        # todo sacado de la factura
+        # toodo sacado de la factura
         { 'CantReg' => '1', 'CbteTipo' => bill_type, 'PtoVta' => Bravo.sale_point }
       end
     end
@@ -131,7 +112,6 @@ module Bravo
     #
     def setup_response(response)
       # TODO: turn this into an all-purpose Response class
-
       result          = response[:fecae_solicitar_response][:fecae_solicitar_result]
 
       response_header = result[:fe_cab_resp]
@@ -144,22 +124,24 @@ module Bravo
 
       request_detail.merge!(iva)
 
-      response_hash = { :header_result => response_header.delete(:resultado),
-                        :authorized_on => response_header.delete(:fch_proceso),
-                        :detail_result => response_detail.delete(:resultado),
-                        :cae_due_date  => response_detail.delete(:cae_fch_vto),
-                        :cae           => response_detail.delete(:cae),
-                        :iva_id        => request_detail.delete(:id),
-                        :iva_importe   => request_detail.delete(:importe),
-                        :moneda        => request_detail.delete(:mon_id),
-                        :cotizacion    => request_detail.delete(:mon_cotiz),
-                        :iva_base_imp  => request_detail.delete(:base_imp),
-                        :doc_num       => request_detail.delete(:doc_nro)
-                        }.merge!(request_header).merge!(request_detail)
+      response_hash = { header_result: response_header.delete(:resultado),
+                        authorized_on: response_header.delete(:fch_proceso),
 
-      keys, values  = response_hash.to_a.transpose
+                        detail_result: response_detail.delete(:resultado),
+                        cae_due_date:  response_detail.delete(:cae_fch_vto),
+                        cae:           response_detail.delete(:cae),
 
-      self.response = (defined?(Struct::Response) ? Struct::Response : Struct.new('Response', *keys)).new(*values)
+                        iva_id:        request_detail.delete(:id),
+                        iva_importe:   request_detail.delete(:importe),
+                        moneda:        request_detail.delete(:mon_id),
+                        cotizacion:    request_detail.delete(:mon_cotiz),
+                        iva_base_imp:  request_detail.delete(:base_imp),
+                        doc_num:       request_detail.delete(:doc_nro)
+                      }.merge!(request_header).merge!(request_detail)
+
+      keys, values = response_hash.to_a.transpose
+
+      self.response = Struct.new('Response', *keys).new(*values)
     end
 
     def applicable_iva
@@ -181,7 +163,7 @@ module Bravo
         iva_cond
       else
         raise(NullOrInvalidAttribute.new,
-              "El valor de iva_condition debe estar incluído en #{ valid_conditions }")
+          "El valor de iva_condition debe estar incluído en #{ valid_conditions }")
       end
     end
 
@@ -192,6 +174,23 @@ module Bravo
         raise(NullOrInvalidAttribute.new, "invoice_type debe estar incluido en \
             #{ Bravo::BILL_TYPE_A.keys }")
       end
+    end
+
+    def setup_request_structure
+      { 'FeCAEReq' =>
+        { 'FeCabReq' => Bravo::Bill.header(bill_type),
+          'FeDetReq' =>
+            { 'FECAEDetRequest' =>
+              { 'Concepto' => Bravo::CONCEPTOS[concept], 'DocTipo' => Bravo::DOCUMENTOS[document_type],
+                'CbteFch' => today, 'ImpTotConc'  => 0.00, 'MonId' => Bravo::MONEDAS[currency][:codigo],
+                'MonCotiz' => 1, 'ImpOpEx' => 0.00, 'ImpTrib' => 0.00,
+                'Iva' =>
+                  { 'AlicIva' => { 'Id' => applicable_iva_code, 'BaseImp' => net.round(2),
+                                   'Importe' => iva_sum } } } } } }
+    end
+
+    def today
+      Time.new.strftime('%Y%m%d')
     end
   end
 end

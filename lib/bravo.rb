@@ -16,7 +16,6 @@ module Bravo
   #
   class MissingCertificate < StandardError; end
 
-
   # This class handles the logging options
   #
   class Logger < Struct.new(:log, :pretty_xml, :level)
@@ -25,13 +24,13 @@ module Bravo
 
     def initialize(opts = {})
       self.log = opts[:log] || false
-      self.pretty_xml = opts[:pretty_xml] || self.log
+      self.pretty_xml = opts[:pretty_xml] || log
       self.level = opts[:level] || :debug
     end
 
     # @return [Hash] returns a hash with the proper logging optios for Savon.
     def logger_options
-      { log: self.log, pretty_print_xml: self.pretty_xml, log_level: self.level }
+      { log: log, pretty_print_xml: pretty_xml, log_level: level }
     end
   end
 
@@ -44,9 +43,8 @@ module Bravo
 
   extend self
 
-  attr_accessor :cuit, :sale_point, :default_documento, :pkey, :cert,
-                :default_concepto, :default_moneda, :own_iva_cond,
-                :openssl_bin
+  attr_accessor :cuit, :sale_point, :default_documento, :pkey, :cert, :default_concepto, :default_moneda,
+    :own_iva_cond, :openssl_bin
 
   class << self
     # Receiver of the logging configuration options.
@@ -69,7 +67,7 @@ module Bravo
     end
 
     def own_iva_cond=(iva_cond_symbol)
-      if Bravo::BILL_TYPE.has_key?(iva_cond_symbol)
+      if Bravo::BILL_TYPE.key?(iva_cond_symbol)
         @own_iva_cond = iva_cond_symbol
       else
         raise(NullOrInvalidAttribute.new, "El valor de  own_iva_cond: (#{ iva_cond_symbol }) es inválido.")

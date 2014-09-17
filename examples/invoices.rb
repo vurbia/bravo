@@ -14,7 +14,7 @@ Bravo::AuthData.environment         = :test
 
 # Let's issue a Factura for 1200 ARS to a Responsable Inscripto
 bill_a = Bravo::Bill.new(iva_condition: :responsable_inscripto, net: 1200, invoice_type: :invoice)
-bill_a.document_number      = '30710151543' 
+bill_a.document_number      = '30710151543'
 bill_a.document_type        = 'CUIT'
 bill_a.authorize
 
@@ -33,4 +33,3 @@ puts "Let's issue a Factura for 100 ARS to a Consumidor Final"
 puts "Authorization result = #{ bill_b.authorized? }"
 puts "Authorization response."
 pp bill_b.response
-

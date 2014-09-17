@@ -8,14 +8,14 @@ Gem::Specification.new do |gem|
   gem.version       = Bravo::VERSION
   gem.authors       = ["Leandro Marcucci"]
   gem.email         = ["leanucci@gmail.com"]
-  gem.description   = %q{Adaptador para el Web Service de Facturacion Electrónica de AFIP}
-  gem.summary       = %q{Adaptador WSFE}
+  gem.description   = 'Adaptador para el Web Service de Facturacion Electrónica de AFIP'
+  gem.summary       = 'Adaptador WSFE'
   gem.homepage      = "https://github.com/leanucci/bravo#readme"
-  gem.date          = %q(2011-03-14)
+  gem.date          = '2011-03-14'
 
   gem.files         = `git ls-files`.split($/)
-  gem.files.reject! { |f| f.include? 'vcr' }
-  gem.executables   = gem.files.grep(%r{^bin/}).map{ |f| File.basename(f) }
+  gem.files.reject! {|f| f.include? 'vcr' }
+  gem.executables   = gem.files.grep(%r{^bin/}).map{|f| File.basename(f) }
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib", "bin"]
 

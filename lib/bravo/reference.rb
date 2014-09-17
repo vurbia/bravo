@@ -9,7 +9,8 @@ module Bravo
       set_client
       resp = @client.call(:fe_comp_ultimo_autorizado) do |soap|
         # soap.namespaces['xmlns'] = 'http://ar.gov.afip.dif.FEV1/'
-        soap.message 'Auth' => Bravo::AuthData.auth_hash, 'PtoVta' => Bravo.sale_point, 'CbteTipo' => cbte_type
+        soap.message 'Auth' => Bravo::AuthData.auth_hash, 'PtoVta' => Bravo.sale_point,
+          'CbteTipo' => cbte_type
       end
 
       resp.to_hash[:fe_comp_ultimo_autorizado_response][:fe_comp_ultimo_autorizado_result][:cbte_nro].to_i + 1
