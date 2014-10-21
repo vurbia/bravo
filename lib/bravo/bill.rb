@@ -110,6 +110,7 @@ module Bravo
     # Response parser. Only works for the authorize method
     # @return [Struct] a struct with key-value pairs with the response values
     #
+    # rubocop:disable Metrics/MethodLength
     def setup_response(response)
       # TODO: turn this into an all-purpose Response class
       result          = response[:fecae_solicitar_response][:fecae_solicitar_result]
@@ -120,9 +121,7 @@ module Bravo
       request_header  = body['FeCAEReq']['FeCabReq'].underscore_keys.symbolize_keys
       request_detail  = body['FeCAEReq']['FeDetReq']['FECAEDetRequest'].underscore_keys.symbolize_keys
 
-      iva             = request_detail.delete(:iva)['AlicIva'].underscore_keys.symbolize_keys
-
-      request_detail.merge!(iva)
+      request_detail.merge!(request_detail.delete(:iva)['AlicIva'].underscore_keys.symbolize_keys)
 
       response_hash = { header_result: response_header.delete(:resultado),
                         authorized_on: response_header.delete(:fch_proceso),
@@ -143,6 +142,7 @@ module Bravo
 
       self.response = Struct.new('Response', *keys).new(*values)
     end
+    # rubocop:enable Metrics/MethodLength
 
     def applicable_iva
       index = Bravo::APPLICABLE_IVA[Bravo.own_iva_cond][iva_condition]

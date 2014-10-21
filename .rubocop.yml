@@ -1,0 +1,163 @@
+---
+AllCops:
+  Exclude:
+  - 'doc/'
+  - 'coverage/'
+  - 'pkg/'
+  - 'tmp/'
+
+Metrics/CyclomaticComplexity:
+  Severity: error
+  Max: 8
+
+Metrics/LineLength:
+  Max: 110
+  Severity: error
+
+Metrics/ClassLength:
+  Max: 150
+  Severity: error
+
+Metrics/MethodLength:
+  Max: 15
+  Severity: error
+
+Metrics/ParameterLists:
+  Max: 5
+  Severity: error
+
+Metrics/PerceivedComplexity:
+  Max: 10
+  Severity: error
+
+Lint/EndAlignment:
+  AlignWith: variable
+
+Lint/UselessAssignment:
+  Severity: error
+
+Lint/ShadowingOuterLocalVariable:
+  Severity: convention
+
+Style/CaseEquality:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+  Severity: error
+
+Style/IfUnlessModifier:
+  MaxLineLength: 80
+
+Style/GuardClause:
+  MinBodyLength: 3
+
+Style/Lambda:
+  Enabled: false
+
+Style/EmptyLinesAroundBody:
+  Enabled: false
+
+Style/EmptyLineBetweenDefs:
+  AllowAdjacentOneLineDefs: true
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/AndOr:
+  EnforcedStyle: conditionals
+
+# This one is usefull for class attr_*
+Style/TrivialAccessors:
+  AllowDSLWriters: true
+
+Style/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+
+Style/AlignHash:
+  EnforcedHashRocketStyle: key
+  EnforcedLastArgumentHashStyle: always_ignore
+
+Style/ModuleFunction:
+  Enabled: false
+
+Style/RegexpLiteral:
+  # The maximum number of (escaped) slashes that a slash-delimited regexp is
+  # allowed to have. If there are more slashes, a %r regexp shall be used.
+  MaxSlashes: 0
+
+Style/FormatString:
+  Enabled: false
+
+Style/SingleLineBlockParams:
+  Enabled: false
+
+Style/CaseIndentation:
+  IndentWhenRelativeTo: end
+
+Style/PredicateName:
+  Severity: error
+
+Style/IndentHash:
+  EnforcedStyle: consistent
+
+Style/MultilineBlockChain:
+  Severity: error
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+Style/Alias:
+  Enabled: false
+
+Style/StringLiterals:
+  Enabled: false
+
+Style/SpaceInsideBlockBraces:
+  SpaceBeforeBlockParameters: true
+
+Style/PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%i': '[]'
+    '%w': '[]'
+    '%W': '[]'
+    '%': '{}'
+
+Style/CollectionMethods:
+  PreferredMethods:
+    reduce: inject
+    collect: map
+    collect!: 'map!'
+    detect: find
+    detect!: 'find!'
+    find_all: select
+    find_all!: 'select!'
+
+Style/DoubleNegation:
+  Severity: error
+
+Style/SignalException:
+  EnforcedStyle: only_raise
+
+Style/DotPosition:
+  EnforcedStyle: trailing
+
+Style/SingleLineMethods:
+  AllowIfMethodIsEmpty: true
+
+# It doesnt handle cases when we want to align multiple methods call into a table like
+Style/SingleSpaceBeforeFirstArg:
+  Enabled: false
+
+# replaces $1 x Regexp.last_match[1]
+Style/PerlBackrefs:
+  Enabled: false
+
+# There are valid cases (eg. Date.parse(date) rescue nil)
+Style/RescueModifier:
+  Enabled: false
+
+Style/Blocks:
+  Severity: error
+  Exclude:
+  - '**/spec/**/*_spec.rb'

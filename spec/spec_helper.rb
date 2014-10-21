@@ -31,9 +31,9 @@ Bravo.default_concepto  = 'Productos y Servicios'
 Bravo.default_documento = 'CUIT'
 Bravo.default_moneda    = :peso
 Bravo.own_iva_cond      = :responsable_inscripto
-# Bravo.logger            = { log: true, level: :critical }
+Bravo.logger            = { log: false, level: :debug }
 Bravo.openssl_bin       = 'openssl'
-Bravo::AuthData.environment         = :test
+Bravo::AuthData.environment = :test
 
 # TODO: refactor into actual validations
 

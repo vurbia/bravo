@@ -2,12 +2,11 @@
 # -*- encoding: utf-8 -*-
 
 require 'thor'
-
+# base module
 module Bravo
   # Bravo executable for certificate request generation
   #
   class Bravo < Thor
-
     desc 'gencsr', 'Crea el Certificate Signature Request'
     method_option :bin,  type: :string, required: true, desc: 'El path completo al binario de openssl'
     method_option :pkey, type: :string,

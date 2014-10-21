@@ -6,3 +6,6 @@ bundler_args: --without test
 branches:
   only:
     - master
+script:
+  - bundle exec rspec spec
+  - bundle exec rubocop

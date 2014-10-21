@@ -63,7 +63,8 @@ describe 'Bill' do
       bill.concept   = 'Servicios'
     end
 
-    it 'uses today dates when due and service dates are null', vcr: { cassette_name: 'setup_bill_ommitted_date' } do
+    it 'uses today dates when due and service dates are null',
+      vcr: { cassette_name: 'setup_bill_ommitted_date' } do
       bill.setup_bill
 
       detail = bill.body['FeCAEReq']['FeDetReq']['FECAEDetRequest']
