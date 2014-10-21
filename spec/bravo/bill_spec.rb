@@ -7,23 +7,23 @@ describe 'Bill' do
   describe '.header' do
     it 'sets up the header hash' do
       @header = Bravo::Bill.header(0)
-      @header.size.should eql 3
+      expect(@header.size).to be 3
       %w[CantReg CbteTipo PtoVta].each do |key|
-        @header.key?(key).should == true
+        expect(@header.key?(key)).to be_true
       end
     end
   end
 
   describe '.initialize' do
     it 'applies Bravos defaults' do
-      bill.client.class.name.should eql 'Savon::Client'
+      expect(bill.client).to be_a Savon::Client
 
       %w[Token Sign Cuit].each do |key|
-        bill.body['Auth'][key].should_not eql nil
+        expect(bill.body['Auth'].fetch(key, nil)).not_to be_nil
       end
 
-      bill.document_type.should eql Bravo.default_documento
-      bill.currency.should == Bravo.default_moneda
+      expect(bill.document_type).to be Bravo.default_documento
+      expect(bill.currency).to be Bravo.default_moneda
     end
   end
 
@@ -32,13 +32,13 @@ describe 'Bill' do
     it 'returns the bill type for Responsable Inscripto' do
       bill.iva_condition = :responsable_inscripto
 
-      bill.bill_type.should == '01'
+      expect(bill.bill_type).to eq '01'
     end
 
     it 'returns the bill type for Consumidor Final' do
       bill.iva_condition = :consumidor_final
 
-      bill.bill_type.should == '06'
+      expect(bill.bill_type).to eq '06'
     end
   end
 
@@ -49,8 +49,8 @@ describe 'Bill' do
       bill.net            = 100.89
       bill.aliciva_id     = 2
 
-      bill.iva_sum.should be_within(0.005).of(21.19)
-      bill.total.should be_within(0.005).of(122.08)
+      expect(bill.iva_sum).to be_within(0.005).of(21.19)
+      expect(bill.total).to be_within(0.005).of(122.08)
     end
   end
 
@@ -68,9 +68,9 @@ describe 'Bill' do
 
       detail = bill.body['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
-      detail['FchServDesde'].should eql Time.new.strftime('%Y%m%d')
-      detail['FchServHasta'].should eql Time.new.strftime('%Y%m%d')
-      detail['FchVtoPago'].should   eql Time.new.strftime('%Y%m%d')
+      expect(detail['FchServDesde']).to eq Time.new.strftime('%Y%m%d')
+      expect(detail['FchServHasta']).to eq Time.new.strftime('%Y%m%d')
+      expect(detail['FchVtoPago']).to   eq Time.new.strftime('%Y%m%d')
     end
 
     it 'uses given due and service dates', vcr: { cassette_name: 'setup_bill_given_date' } do
@@ -82,9 +82,9 @@ describe 'Bill' do
 
       detail = bill.body['FeCAEReq']['FeDetReq']['FECAEDetRequest']
 
-      detail['FchServDesde'].should eql '20111101'
-      detail['FchServHasta'].should eql '20111130'
-      detail['FchVtoPago'].should   eql '20111210'
+      expect(detail['FchServDesde']).to eq '20111101'
+      expect(detail['FchServHasta']).to eq '20111130'
+      expect(detail['FchVtoPago']).to   eq '20111210'
     end
   end
 
@@ -102,14 +102,15 @@ describe 'Bill' do
               bill.concept = 'Servicios'
               bill.invoice_type = bill_type
 
-              bill.authorized?.should  eql false
-              bill.authorize.should    eql true
-              bill.authorized?.should  eql true
+              expect(bill.authorized?).to  be_false
+
+              expect(bill.authorize).to   be_true
+              expect(bill.authorized?).to  be_true
 
               response = bill.response
 
-              response.length.should     eql 28
-              response.cae.length.should eql 14
+              expect(response.length).to     eql 28
+              expect(response.cae.length).to eql 14
             end
           end
         end

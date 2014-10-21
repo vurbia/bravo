@@ -95,15 +95,15 @@ Código de ejemplo para la configuración anterior:
 
 bill = Bravo::Bill.new
 
-bill.net          = 100.00			# el neto de la factura, total para Consumidor final
-bill.aliciva_id   = 2			# define la alicuota de iva a utilizar, ver archivo constants.
+bill.net          = 100.00	# el neto de la factura, total para Consumidor final
+bill.aliciva_id   = 2010	# define la alicuota de iva a utilizar, ver archivo constants.
 bill.iva_cond     = :consumidor_final	# la condición ante el iva del 	comprador
-bill.concepto     = 'Servicios'		# concepto de la factura
-bill.invoice_type = :invoice			# el tipo de comprobante a emitir, en este caso factura.
+bill.concepto     = 'Servicios'	# concepto de la factura
+bill.invoice_type 	= :invoice	# el tipo de comprobante a emitir, en este caso factura.
 
 bill.authorize
 
-bill.response.cae				# contiene el cae para este comprobante.
+bill.response.cae # contiene el cae para este comprobante.
 
 ```
 
