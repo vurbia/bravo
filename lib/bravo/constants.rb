@@ -79,7 +79,7 @@ module Bravo
     credit:  '03'
   }
 
-  # This hash keeps the codes for A document types by operation
+  # This hash keeps the codes for B document types by operation
   #
   BILL_TYPE_B = {
     invoice: '06',
@@ -108,6 +108,6 @@ module Bravo
             wsfe: 'https://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL' },
 
     production: { wsaa: 'https://wsaa.afip.gov.ar/ws/services/LoginCms',
-                  wsfe: 'https://servicios1.afip.gov.ar/wsfev1/service.asmx' }
+                  wsfe: 'https://servicios1.afip.gov.ar/wsfev1/service.asmx?WSDL' }
   }
 end
