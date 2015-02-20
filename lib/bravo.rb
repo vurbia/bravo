@@ -34,12 +34,13 @@ module Bravo
     end
   end
 
-  autoload :Authorizer,   'bravo/authorizer'
-  autoload :AuthData,     'bravo/auth_data'
-  autoload :Bill,         'bravo/bill'
-  autoload :Constants,    'bravo/constants'
-  autoload :Wsaa,         'bravo/wsaa'
-  autoload :Reference,    'bravo/reference'
+  autoload :Authorizer, 'bravo/authorizer'
+  autoload :AuthData,   'bravo/auth_data'
+  autoload :Bill,       'bravo/bill'
+  autoload :Constants,  'bravo/constants'
+  autoload :Wsaa,       'bravo/wsaa'
+  autoload :Reference,  'bravo/reference'
+  autoload :Request,    'bravo/request'
 
   extend self
 

@@ -18,10 +18,10 @@ module Bravo
       @client       ||= Savon.client(opts)
       @body           = { 'Auth' => AuthData.auth_hash }
       @iva_condition  = validate_iva_condition(attrs[:iva_condition])
-      @net            = attrs[:net]           || 0
-      @document_type  = attrs[:document_type] || Bravo.default_documento
-      @currency       = attrs[:currency]      || Bravo.default_moneda
-      @concept        = attrs[:concept]       || Bravo.default_concepto
+      @net            = attrs[:net].to_f.round(2) || 0
+      @document_type  = attrs.fetch(:document_type, Bravo.default_documento)
+      @currency       = attrs.fetch(:currency, Bravo.default_moneda)
+      @concept        = attrs.fetch(:concept, Bravo.default_concepto)
       @invoice_type   = validate_invoice_type(attrs[:invoice_type])
     end
 
@@ -38,7 +38,7 @@ module Bravo
     # @return [Float] the sum of both fields, or 0 if the net is 0.
     #
     def total
-      @total = net.zero? ? 0 : net + iva_sum
+      @total = net.zero? ? 0.0 : net + iva_sum
     end
 
     # Calculates the corresponding iva sum.
@@ -58,35 +58,35 @@ module Bravo
     def authorize
       setup_bill
       response = client.call(:fecae_solicitar) do |soap|
-        # soap.namespaces['xmlns'] = 'http://ar.gov.afip.dif.FEV1/'
         soap.message body
       end
 
       setup_response(response.to_hash)
-      self.authorized?
+      authorized?
     end
 
     # Sets up the request body for the authorisation
     # @return [Hash] returns the request body as a hash
     #
     def setup_bill
-      fecaereq = setup_request_structure
+      request = Request.new
+      request.header = Bill.header(bill_type)
+      request.concept = CONCEPTOS[concept]
+      request.document_type = DOCUMENTOS[document_type]
+      request.date = today
+      request.currency_id = MONEDAS[currency][:codigo]
+      request.iva_code = applicable_iva_code
+      request.net_amount = net.to_f
+      request.iva_amount = iva_sum
+      request.document_number = document_number
+      request.total = total
+      request.from = request.to = Reference.next_bill_number(bill_type)
 
-      detail = fecaereq['FeCAEReq']['FeDetReq']['FECAEDetRequest']
+      request.date_from = date_from || today
+      request.date_to   = date_to || today
+      request.due_on    = due_date || today
 
-      detail['DocNro']    = document_number
-      detail['ImpNeto']   = net.to_f
-      detail['ImpIVA']    = iva_sum
-      detail['ImpTotal']  = total
-      detail['CbteDesde'] = detail['CbteHasta'] = Reference.next_bill_number(bill_type)
-
-      unless concept == 0
-        detail.merge!('FchServDesde'  => date_from  || today,
-                      'FchServHasta'  => date_to    || today,
-                      'FchVtoPago'    => due_date   || today)
-      end
-
-      body.merge!(fecaereq)
+      body.merge!(request.to_hash)
     end
 
     # Returns the result of the authorization operation
@@ -176,19 +176,6 @@ module Bravo
 
       raise(NullOrInvalidAttribute.new, "invoice_type debe estar incluido en \
             #{ Bravo::BILL_TYPE_A.keys }")
-    end
-
-    def setup_request_structure
-      { 'FeCAEReq' =>
-        { 'FeCabReq' => Bill.header(bill_type),
-          'FeDetReq' =>
-            { 'FECAEDetRequest' =>
-              { 'Concepto' => CONCEPTOS[concept], 'DocTipo' => DOCUMENTOS[document_type],
-                'CbteFch' => today, 'ImpTotConc'  => 0.00, 'MonId' => MONEDAS[currency][:codigo],
-                'MonCotiz' => 1, 'ImpOpEx' => 0.00, 'ImpTrib' => 0.00,
-                'Iva' =>
-                  { 'AlicIva' => { 'Id' => applicable_iva_code, 'BaseImp' => net.round(2),
-                                   'Importe' => iva_sum } } } } } }
     end
 
     def today
