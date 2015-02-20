@@ -73,5 +73,10 @@ module Bravo
         raise(NullOrInvalidAttribute.new, "El valor de  own_iva_cond: (#{ iva_cond_symbol }) es inválido.")
       end
     end
+
+    def auth_filename
+      "/tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%Y_%m_%d') }.yml"
+    end
+
   end
 end

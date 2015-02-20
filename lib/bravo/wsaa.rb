@@ -90,7 +90,7 @@ XML
 token: #{certs[0]}
 sign: #{certs[1]}
 YML
-      `echo '#{ yml }' > /tmp/bravo_#{ Bravo.cuit }_#{ Time.new.strftime('%Y_%m_%d') }.yml`
+      File.write(Bravo.auth_filename, yml)
     end
 
   end
