@@ -9,7 +9,7 @@ describe 'Bill' do
       @header = Bravo::Bill.header(0)
       expect(@header.size).to be 3
       %w[CantReg CbteTipo PtoVta].each do |key|
-        expect(@header.key?(key)).to be_true
+        expect(@header.key?(key)).to be_truthy
       end
     end
   end
@@ -103,10 +103,10 @@ describe 'Bill' do
               bill.concept = 'Servicios'
               bill.invoice_type = bill_type
 
-              expect(bill.authorized?).to  be_false
+              expect(bill.authorized?).to  be_falsey
 
-              expect(bill.authorize).to   be_true
-              expect(bill.authorized?).to  be_true
+              expect(bill.authorize).to   be_truthy
+              expect(bill.authorized?).to  be_truthy
 
               response = bill.response
 

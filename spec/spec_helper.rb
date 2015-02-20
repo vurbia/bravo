@@ -13,12 +13,11 @@ end
 
 VCR.configure do |c|
   c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
-  c.hook_into :fakeweb
+  c.hook_into :webmock
   c.configure_rspec_metadata!
 end
 
 RSpec.configure do |config|
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.filter_run focus: true
   config.run_all_when_everything_filtered = true
 end
@@ -31,8 +30,8 @@ Bravo.default_concepto  = 'Productos y Servicios'
 Bravo.default_documento = 'CUIT'
 Bravo.default_moneda    = :peso
 Bravo.own_iva_cond      = :responsable_inscripto
-Bravo.logger            = { log: false, level: :debug }
-Bravo.openssl_bin       = 'openssl'
+Bravo.logger            = { log: false, level: :info }
+Bravo.openssl_bin       = '/usr/local/opt/openssl/bin/openssl'
 Bravo::AuthData.environment = :test
 
 # TODO: refactor into actual validations

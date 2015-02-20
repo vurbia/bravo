@@ -19,14 +19,13 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = %w[lib bin]
 
-  gem.add_runtime_dependency(%{savon}, ["~> 2.3.0"])
-  gem.add_runtime_dependency(%{thor}, ["~> 0.17.0"])
+  gem.add_runtime_dependency(%{savon}, ["~> 2.9.0"])
+  gem.add_runtime_dependency(%{thor}, ["~> 0.19.0"])
 
-  gem.add_development_dependency(%{rspec}, ["~> 2.14.0"])
-  gem.add_development_dependency(%{rspec-mocks}, ["~> 2.14.0"])
-  gem.add_development_dependency(%{rake}, ["~> 10.0.0"])
-  gem.add_development_dependency(%{vcr}, ["~> 2.4.0"])
-  gem.add_development_dependency(%{simplecov}, ["~> 0.7.0"])
-  gem.add_development_dependency(%{fakeweb}, ["~> 1.3.0"])
-  gem.add_development_dependency(%{rubocop}, ["~> 0.26.1"])
+  gem.add_development_dependency(%{rspec}, ["~> 3.2.0"])
+  gem.add_development_dependency(%{rake}, ["~> 10.4.0"])
+  gem.add_development_dependency(%{vcr}, ["~> 2.9.0"])
+  gem.add_development_dependency(%{simplecov}, ["~> 0.9.0"])
+  gem.add_development_dependency(%{rubocop}, ["~> 0.29.0"])
+  gem.add_development_dependency(%{webmock}, ["~> 1.18.0"])
 end
