@@ -1,0 +1,13 @@
+--charset          utf-8
+--readme           README.md
+--markup           markdown
+--markup-provider  maruku
+--template-path    yard
+--default-return   ""
+--title            "Bravo Documentation"
+--exclude           lib/bravo/core_ext/*
+
+--hide-void-return
+--protected
+--no-private
+--no-highlight

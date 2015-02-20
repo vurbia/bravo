@@ -1,22 +1,43 @@
-$:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
+$LOAD_PATH.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'bravo'
 require 'rspec'
-require 'ruby-debug'
+require 'vcr'
+require 'simplecov'
+# SimpleCov.start
 
-class SpecHelper
-  include Savon::Logger
+begin
+  require 'debugger'
+rescue LoadError
+  puts 'debugger not found'
 end
 
-# Requires supporting files with custom matchers and macros, etc,
-# in ./support/ and its subdirectories.
-Dir["#{File.dirname(__FILE__)}/support/**/*.rb"].each {|f| require f}
+VCR.configure do |c|
+  c.cassette_library_dir = 'spec/fixtures/vcr_cassettes'
+  c.hook_into :webmock
+  c.configure_rspec_metadata!
+end
 
-Bravo.pkey = "spec/fixtures/pkey"
-Bravo.cert = "spec/fixtures/cert.crt"
-Bravo.cuit = ENV["CUIT"] || raise(Bravo::NullOrInvalidAttribute.new, "Please set CUIT env variable.")
-Bravo.sale_point = "0002"
-Bravo.service_url = "http://wswhomo.afip.gov.ar/wsfev1/service.asmx?WSDL"
-Bravo.default_concepto = "Productos y Servicios"
-Bravo.default_documento = "CUIT"
-Bravo.default_moneda = :peso
-Bravo.own_iva_cond = :responsable_inscripto
+RSpec.configure do |config|
+  config.filter_run focus: true
+  config.run_all_when_everything_filtered = true
+end
+
+Bravo.pkey              = 'spec/fixtures/certs/pkey'
+Bravo.cert              = 'spec/fixtures/certs/cert.crt'
+Bravo.cuit              = ENV['CUIT'] || '20287740027'
+Bravo.sale_point        = ENV['SALE'] || '0002'
+Bravo.default_concepto  = 'Productos y Servicios'
+Bravo.default_documento = 'CUIT'
+Bravo.default_moneda    = :peso
+Bravo.own_iva_cond      = :responsable_inscripto
+Bravo.logger            = { log: false, level: :info }
+Bravo.openssl_bin       = '/usr/local/opt/openssl/bin/openssl'
+Bravo::AuthData.environment = :test
+
+# TODO: refactor into actual validations
+
+raise(Bravo::NullOrInvalidAttribute.new, 'Please set CUIT env variable.') unless Bravo.cuit
+
+[Bravo.pkey, Bravo.cert].each do |file|
+  raise(Bravo::MissingCertificate.new, "No existe #{ file }") unless File.exist?("#{ file }")
+end

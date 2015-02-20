@@ -25,6 +25,10 @@ tmtags
 .rspec
 log/
 log/*.log
-fixtures/
-fixtures/*
+./fixtures/
+./fixtures/vcr_cassettes/
 *.gem
+tmp/
+bin/bravo-certs/
+.ruby-version
+Gemfile.lock
