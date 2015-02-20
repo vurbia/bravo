@@ -4,18 +4,19 @@ module Bravo
   # Subsequent implementations will be added here (maybe).
   #
   class Bill
-    # Returns the Savon::Client instance in charge of the interactions with WSFE API.
-    # (built on init)
+    # Returns the Savon::Client instance in charge of the interactions
+    # with WSFE API (built on init)
     #
     attr_reader :client
 
-    attr_accessor :net, :document_number, :iva_condition, :document_type, :concept, :currency, :due_date,
-      :aliciva_id, :date_from, :date_to, :body, :response, :invoice_type
+    attr_accessor :net, :document_number, :iva_condition, :document_type,
+      :concept, :currency, :due_date, :aliciva_id, :date_from, :date_to, :body,
+      :response, :invoice_type
 
     def initialize(attrs = {})
-      opts = { wsdl: Bravo::AuthData.wsfe_url }.merge! Bravo.logger_options
+      opts = { wsdl: AuthData.wsfe_url }.merge! Bravo.logger_options
       @client       ||= Savon.client(opts)
-      @body           = { 'Auth' => Bravo::AuthData.auth_hash }
+      @body           = { 'Auth' => AuthData.auth_hash }
       @iva_condition  = validate_iva_condition(attrs[:iva_condition])
       @net            = attrs[:net]           || 0
       @document_type  = attrs[:document_type] || Bravo.default_documento
@@ -29,7 +30,7 @@ module Bravo
     # @return [String] the document type string
     #
     def bill_type
-      Bravo::BILL_TYPE[Bravo.own_iva_cond][iva_condition][invoice_type]
+      BILL_TYPE[Bravo.own_iva_cond][iva_condition][invoice_type]
     end
 
     # Calculates the total field for the invoice by adding
@@ -77,7 +78,7 @@ module Bravo
       detail['ImpNeto']   = net.to_f
       detail['ImpIVA']    = iva_sum
       detail['ImpTotal']  = total
-      detail['CbteDesde'] = detail['CbteHasta'] = Bravo::Reference.next_bill_number(bill_type)
+      detail['CbteDesde'] = detail['CbteHasta'] = Reference.next_bill_number(bill_type)
 
       unless concept == 0
         detail.merge!('FchServDesde'  => date_from  || today,
@@ -92,7 +93,7 @@ module Bravo
     # @return [Boolean] the response result
     #
     def authorized?
-      !response.nil? && response.header_result == 'A' && response.detail_result == 'A'
+      response && response.header_result == 'A' && response.detail_result == 'A'
     end
 
     private
@@ -103,7 +104,10 @@ module Bravo
       #
       def header(bill_type)
         # toodo sacado de la factura
-        { 'CantReg' => '1', 'CbteTipo' => bill_type, 'PtoVta' => Bravo.sale_point }
+        { 'CantReg'  => '1',
+          'CbteTipo' => bill_type,
+          'PtoVta'   => Bravo.sale_point
+        }
       end
     end
 
@@ -113,13 +117,13 @@ module Bravo
     # rubocop:disable Metrics/MethodLength
     def setup_response(response)
       # TODO: turn this into an all-purpose Response class
-      result          = response[:fecae_solicitar_response][:fecae_solicitar_result]
+      result = response[:fecae_solicitar_response][:fecae_solicitar_result]
 
       response_header = result[:fe_cab_resp]
       response_detail = result[:fe_det_resp][:fecae_det_response]
 
-      request_header  = body['FeCAEReq']['FeCabReq'].underscore_keys.symbolize_keys
-      request_detail  = body['FeCAEReq']['FeDetReq']['FECAEDetRequest'].underscore_keys.symbolize_keys
+      request_header = body['FeCAEReq']['FeCabReq'].underscore_keys.symbolize_keys
+      request_detail = body['FeCAEReq']['FeDetReq']['FECAEDetRequest'].underscore_keys.symbolize_keys
 
       request_detail.merge!(request_detail.delete(:iva)['AlicIva'].underscore_keys.symbolize_keys)
 
@@ -140,13 +144,13 @@ module Bravo
 
       keys, values = response_hash.to_a.transpose
 
-      self.response = Struct.new('Response', *keys).new(*values)
+      self.response = response_klass(keys).new(*values)
     end
     # rubocop:enable Metrics/MethodLength
 
     def applicable_iva
-      index = Bravo::APPLICABLE_IVA[Bravo.own_iva_cond][iva_condition]
-      Bravo::ALIC_IVA[index]
+      index = APPLICABLE_IVA[Bravo.own_iva_cond][iva_condition]
+      ALIC_IVA[index]
     end
 
     def applicable_iva_code
@@ -158,7 +162,7 @@ module Bravo
     end
 
     def validate_iva_condition(iva_cond)
-      valid_conditions = Bravo::BILL_TYPE[Bravo.own_iva_cond].keys
+      valid_conditions = BILL_TYPE[Bravo.own_iva_cond].keys
       if valid_conditions.include? iva_cond
         iva_cond
       else
@@ -168,21 +172,19 @@ module Bravo
     end
 
     def validate_invoice_type(type)
-      if Bravo::BILL_TYPE_A.keys.include? type
-        type
-      else
-        raise(NullOrInvalidAttribute.new, "invoice_type debe estar incluido en \
+      return type if BILL_TYPE_A.keys.include? type
+
+      raise(NullOrInvalidAttribute.new, "invoice_type debe estar incluido en \
             #{ Bravo::BILL_TYPE_A.keys }")
-      end
     end
 
     def setup_request_structure
       { 'FeCAEReq' =>
-        { 'FeCabReq' => Bravo::Bill.header(bill_type),
+        { 'FeCabReq' => Bill.header(bill_type),
           'FeDetReq' =>
             { 'FECAEDetRequest' =>
-              { 'Concepto' => Bravo::CONCEPTOS[concept], 'DocTipo' => Bravo::DOCUMENTOS[document_type],
-                'CbteFch' => today, 'ImpTotConc'  => 0.00, 'MonId' => Bravo::MONEDAS[currency][:codigo],
+              { 'Concepto' => CONCEPTOS[concept], 'DocTipo' => DOCUMENTOS[document_type],
+                'CbteFch' => today, 'ImpTotConc'  => 0.00, 'MonId' => MONEDAS[currency][:codigo],
                 'MonCotiz' => 1, 'ImpOpEx' => 0.00, 'ImpTrib' => 0.00,
                 'Iva' =>
                   { 'AlicIva' => { 'Id' => applicable_iva_code, 'BaseImp' => net.round(2),
@@ -191,6 +193,11 @@ module Bravo
 
     def today
       Time.new.strftime('%Y%m%d')
+    end
+
+    def response_klass(keys)
+      Struct.new('Response', *keys) unless Struct.constants.include?(:Response)
+      Struct::Response
     end
   end
 end
