@@ -13,5 +13,8 @@ branches:
   only:
     - master
 addons:
+  apt:
+    packages:
+      - openssl
   code_climate:
     repo_token: d2565426bec84943089cd897d8847bbe11d18912481dac2d16d0b60ff14b0453
