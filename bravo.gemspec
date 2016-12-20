@@ -20,14 +20,14 @@ Gem::Specification.new do |gem|
   gem.test_files    = gem.files.grep(%r{^(test|spec|features)/})
   gem.require_paths = ["lib", "bin"]
 
-  gem.add_runtime_dependency(%q<savon>, ["~> 2.3.0"])
-  gem.add_runtime_dependency(%q<thor>, ["~> 0.17.0"])
-  gem.add_runtime_dependency(%q<rack>, ["~> 1.6"])
+  gem.add_runtime_dependency(%q<savon>, ["~> 2.3", ">= 2.3.0"])
+  gem.add_runtime_dependency(%q<thor>, ["~> 0.17", ">= 0.17.0"])
+  gem.add_runtime_dependency(%q<rack>, ["~> 1.6", ">= 1.6.0"])
 
-  gem.add_development_dependency(%q<rspec>, ["~> 2.14.0"])
-  gem.add_development_dependency(%q<rspec-mocks>, ["~> 2.14.0"])
-  gem.add_development_dependency(%q<rake>, ["~> 10.0.0"])
-  gem.add_development_dependency(%q<vcr>, ["~> 2.4.0"])
-  gem.add_development_dependency(%q<simplecov>, ["~> 0.7.0"])
-  gem.add_development_dependency(%q<fakeweb>, ["~> 1.3.0"])
+  gem.add_development_dependency(%q<rspec>, ["~> 2.14", ">= 2.14.0"])
+  gem.add_development_dependency(%q<rspec-mocks>, ["~> 2.14", ">= 2.14.0"])
+  gem.add_development_dependency(%q<rake>, ["~> 10.0", ">= 10.0.0"])
+  gem.add_development_dependency(%q<vcr>, ["~> 2.4", ">= 2.4.0"])
+  gem.add_development_dependency(%q<simplecov>, ["~> 0.7", ">= 0.7.0"])
+  gem.add_development_dependency(%q<fakeweb>, ["~> 1.3", ">= 1.3.0"])
 end
