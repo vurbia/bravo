@@ -12,6 +12,7 @@ Gem::Specification.new do |gem|
   gem.summary       = %q{Adaptador WSFE}
   gem.homepage      = "https://github.com/leanucci/bravo#readme"
   gem.date          = %q(2011-03-14)
+  gem.license       = 'MIT'
 
   gem.files         = `git ls-files`.split($/)
   gem.files.reject! { |f| f.include? 'vcr' }
