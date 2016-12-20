@@ -2,6 +2,8 @@ language: ruby
 rvm:
   - 1.9.3
   - 2.0.0
+before_install:
+  - gem install bundler
 bundler_args: --without test
 branches:
   only:
