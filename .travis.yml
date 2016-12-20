@@ -6,6 +6,7 @@ rvm:
   - 2.2
 before_install:
   - gem install bundler
+  - openssl version
 bundler_args: --without test
 branches:
   only:
