@@ -1,7 +1,8 @@
-# Bravo 
-![Travis status](https://travis-ci.org/leanucci/bravo.png)
+# Bravo
 [![Gem Version](https://badge.fury.io/rb/bravo.png)](http://badge.fury.io/rb/bravo)
-[![Code Climate](https://codeclimate.com/repos/5292a01e89af7e473304513a/badges/4a29fbaff3d74a23e634/gpa.png)](https://codeclimate.com/repos/5292a01e89af7e473304513a/feed)
+![Travis status](https://travis-ci.org/leanucci/bravo.png)
+[![Code Climate](https://codeclimate.com/github/leanucci/bravo/badges/gpa.svg)](https://codeclimate.com/github/leanucci/bravo)
+[![Test Coverage](https://codeclimate.com/github/leanucci/bravo/badges/coverage.svg)](https://codeclimate.com/github/leanucci/bravo/coverage)
 
 [~~Bravo~~](http://images.coveralia.com/audio/b/Bravo-Desierto_Sin_Amor-Frontal.jpg) Bravo permite la obtenci&oacute;n del [~~C.A.E~~](http://www.muevamueva.com/masmusica/latina/cae/images/fotos.5.gif) C.A.E. (C&oacute;digo de Autorizaci&oacute;n Electr&oacute;nico) por medio del Web Service de Facturaci&oacute;n Electr&oacute;nica provisto por AFIP.
 
