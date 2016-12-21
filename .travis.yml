@@ -9,7 +9,6 @@ before_install:
   - gem install bundler
   - openssl version
   - openssl list-standard-commands | grep 'cms'
-bundler_args: --without test
 branches:
   only:
     - master
@@ -18,3 +17,5 @@ addons:
     repo_token: d2565426bec84943089cd897d8847bbe11d18912481dac2d16d0b60ff14b0453
 script:
   - bundle exec rake spec:clear_cassettes
+after_success:
+  - bundle exec codeclimate-test-reporter

@@ -2,8 +2,11 @@ $:.unshift(File.join(File.dirname(__FILE__), '..', 'lib'))
 require 'bravo'
 require 'rspec'
 require 'vcr'
-require 'simplecov'
-# SimpleCov.start
+
+if ENV['TRAVIS']
+  require 'simplecov'
+  SimpleCov.start
+end
 
 begin
   require 'debugger'
